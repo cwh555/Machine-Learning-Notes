@@ -1,6 +1,5 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as  Component from "./quartz/components"
-import HistoryNotesList from "./quartz/components/pages/HistoryNotesList"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
@@ -67,15 +66,4 @@ export const defaultListPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [],
-}
-
-export const homePageLayout = {
-  beforeBody: [
-    Component.ArticleTitle(),
-  ],
-  left: [],
-  right: [],
-  afterBody: [
-    HistoryNotesList,
-  ],
 }
