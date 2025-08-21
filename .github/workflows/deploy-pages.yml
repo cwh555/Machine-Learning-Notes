@@ -35,6 +35,9 @@ jobs:
       - name: List public folder contents
         run: ls -lR ./public
 
+      - name: Find symlinks and hard links in public
+        run: find ./public -type l -o -type f -exec ls -li {} \;
+
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-artifact@v4
         with:
