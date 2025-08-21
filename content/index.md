@@ -14,3 +14,8 @@ I took extensive notes using Obsidian, and I had an impulse to make them open on
 > [!warning] Notice
 > 
   > Sorry for the slow updates—my brain sometimes has more tabs open than my browser. Completed topics will be listed on the [[Abouts]] page.
+
+
+## History
+ ➕ 2025-08-21 : Build the Website !
+
