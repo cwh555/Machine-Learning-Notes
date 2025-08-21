@@ -1,5 +1,6 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
-import * as Component from "./quartz/components"
+import * as  Component from "./quartz/components"
+import HistoryNotesList from "./quartz/components/pages/HistoryNotesList"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
@@ -8,9 +9,11 @@ export const sharedPageComponents: SharedLayout = {
   afterBody: [],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      github: { text: "GitHub", url: "https://github.com/cwh555/Machine-Learning-Notes" }
     },
+    text: {
+      contact: { text: "Contact : bergerchen719@gmail.com" }
+    }
   }),
 }
 
@@ -41,7 +44,6 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [
-    Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
   ],
@@ -65,4 +67,15 @@ export const defaultListPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [],
+}
+
+export const homePageLayout = {
+  beforeBody: [
+    Component.ArticleTitle(),
+  ],
+  left: [],
+  right: [],
+  afterBody: [
+    HistoryNotesList,
+  ],
 }
