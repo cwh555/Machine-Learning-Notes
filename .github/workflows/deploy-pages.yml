@@ -29,6 +29,12 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
         run: npx quartz build
 
+      - name: Remove symlinks in public
+        run: find ./public -type l -delete
+
+      - name: List public folder contents
+        run: ls -lR ./public
+
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-artifact@v4
         with:
