@@ -1,3 +1,57 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+/*formula block*/
+.callout[data-callout="green"] {
+    --callout-color: 76, 175, 79;
+    background-color: rgba(76, 175, 79, 0.107) !important;
+    border: 1px solid rgba(76, 175, 79, 0.45) !important;
+    // 標題文字與圖示也套用綠色
+    > .callout-title,
+    > .callout-title .callout-title-inner,
+    > .callout-title .callout-title-inner > p {
+      color: rgb(76, 175, 79) !important;
+    }
+    // 標題左側 icon / 折疊 icon 背景同步
+    > .callout-title .callout-icon,
+    > .callout-title .fold-callout-icon {
+      background-color: rgb(76, 175, 79) !important;
+    }
+  }
+
+
+.callout[data-callout="gray"] {
+    --callout-color: 255, 255, 255;
+    background-color: rgba(211, 211, 211, 0.1) !important;
+    border: 1px solid rgba(211, 211, 211, 0.5) !important;
+    // 標題與圖示改為白色
+    > .callout-title,
+    > .callout-title .callout-title-inner,
+    > .callout-title .callout-title-inner > p {
+      color: #ffffff !important;
+    }
+    > .callout-title .callout-icon,
+    > .callout-title .fold-callout-icon {
+      background-color: #ffffff !important;
+    }
+  }
+
+.callout[data-callout="gray"] .callout-content {
+    padding: 10px;
+}
+
+
+.callout[data-callout="blue"] {
+  --callout-color: 10, 91, 231;
+  background-color: rgba(10, 91, 231, 0.183) !important;
+  border: 1px solid rgba(12, 26, 183, 0.255) !important;
+}
+
+.callout[data-callout="gray"] .callout-content {
+  padding: 10px;
+}
+
+
+.lime {
+  color: rgba(0, 255, 0, 0.799)  !important;
+}

@@ -23,6 +23,11 @@ $boldWeight: 700;
 $semiBoldWeight: 600;
 $normalWeight: 400;
 
+// Typography base settings (adjust here to scale the entire site)
+// Increase $baseFontSize to enlarge all rem-based text. Line height unitless multiplier.
+$baseFontSize: 18px !default; // was browser default ~16px
+$baseLineHeight: 2.00 !default; // was 1.6rem (~1.6) — increase for better readability
+
 $mobileGrid: (
   templateRows: "auto auto auto auto auto",
   templateColumns: "auto",
