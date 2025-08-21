@@ -39,9 +39,8 @@ jobs:
         run: find ./public -type l -o -type f -exec ls -li {} \;
 
       - name: Upload artifact for GitHub Pages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
           path: ./public
   deploy:
     needs: build-and-upload
