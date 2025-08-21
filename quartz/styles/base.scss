@@ -65,6 +65,16 @@ ul,
 }
 
 article {
+  // Enhanced reading zone: larger font & relaxed line-height (sidebars keep defaults)
+  font-size: $baseFontSize;
+  line-height: $baseLineHeight;
+  p,
+  li,
+  tbody,
+  td,
+  th {
+    line-height: $baseLineHeight;
+  }
   > mjx-container.MathJax,
   blockquote > div > mjx-container.MathJax {
     display: flex;
@@ -399,19 +409,19 @@ h6 {
 
 // typography improvements
 h1 {
-  font-size: 1.75rem;
+  font-size: 1.9rem;
   margin-top: 2.25rem;
   margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: 1.4rem;
+  font-size: 1.55rem;
   margin-top: 1.9rem;
   margin-bottom: 1rem;
 }
 
 h3 {
-  font-size: 1.12rem;
+  font-size: 1.25rem;
   margin-top: 1.62rem;
   margin-bottom: 1rem;
 }
@@ -419,7 +429,7 @@ h3 {
 h4,
 h5,
 h6 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -516,7 +526,7 @@ code {
 tbody,
 li,
 p {
-  line-height: 1.6rem;
+  line-height: $baseLineHeight;
 }
 
 .table-container {
@@ -618,9 +628,19 @@ ol.overflow {
 }
 
 .katex-display {
-  display: initial;
+  // Center block math rendered by KaTeX. Previously display: initial removed
+  // KaTeX's default centering styles. Restore block context & centering.
+  display: block;
+  text-align: center;
   overflow-x: auto;
   overflow-y: hidden;
+  margin: 1em 0; // restore typical vertical spacing
+  padding: 0.25rem 0; // small breathing room for scrollbars
+}
+
+// Ensure the inner formula does not stretch full width so centering works even with overflow container
+.katex-display > .katex { 
+  display: inline-block; 
 }
 
 .external-embed.youtube,
