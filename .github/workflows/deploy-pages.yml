@@ -30,7 +30,7 @@ jobs:
         run: npx quartz build
 
       - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./public     # quartz 預設輸出是 public，若不同請改路徑
   deploy:
