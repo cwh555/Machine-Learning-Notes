@@ -3,7 +3,7 @@ title: Validation
 date: 2025-08-21
 ---
 ## Description
-We partition the data set $\mathcal{D}$ into a training set $\mathcal{D}_{train}$ of size $(N\,-\,K)$ and a validation set $\mathcal{D}_{val}$ of size $K$ . Now, we run the learning algorithm using the data set $\mathcal{D}_{train}$ to obtain a final hypothesis $g^-\,\in\,\mathcal{H}$ . We compute the validation error for $g^-$ 
+We partition the data set $\mathcal{D}$ into a training set $\mathcal{D}_{train}$ of size $(N\,-\,K)$ and a validation set $\mathcal{D}_{val}$ of size $K$ . We run the learning algorithm on $\mathcal{D}_{train}$ to obtain a final hypothesis $g^- \in \mathcal{H}$. We compute the validation error for $g^-$ 
 $$
 E_{val}(g^-)\ =\ \frac{1}{K} \sum_{x_n\,\in\,\mathcal{D}_{val}} e(g^-(x_n),\,y_n)
 $$
@@ -53,7 +53,7 @@ $$
 > $$
 > <span class = 'lime'>A rule of thumb is to set</span>  $K\ =\ \frac{N}{5}$ .
 
-## Model Selection
+## Application : Model Selection
 Consider a new model $\mathcal{H}_{val}$ which consisting of the final hypotheses learned from the training data using each mode $\mathcal{H}_1,\,\dots\,,\mathcal{H}_M$ :
 $$
 \mathcal{H}_{val}\ =\ \{g^-_1,\,\dots\,,g^-_M\}
@@ -68,7 +68,7 @@ $$
 </div>
 
 ### Cross Validation
-To illustrate easily, we focus on the $\text{\textbf{\textcolor{pink}{leave-one-out}}}$ version which corresponds to a validation set of size $K\,=\,1$ . 
+To illustrate easily, we focus on the <span style="color:pink; font-weight:bold;">leave-one-out</span> version which corresponds to a validation set of size $K\,=\,1$ . 
 There are $N$ ways to partition the data into a training set of size $N\,-\,1$ and a validation set of size $1$ . Specifically, let
 $$
 \mathcal{D}_n\,=\,(x_1,\,y_1)\ \dots\ (x_{n-1},\,y_{n-1}),\, \cancel{(x_n,\,y_n)},\ \dots\ (x_N,\,y_N)
@@ -86,7 +86,7 @@ $$
 <img src="https://i.imgur.com/5SKOIKZ.jpeg" alt="Example Image" style="width: 250px; height: 200px;">
 </div>
 
-In general, we use the $\textbf{\textcolor{pink}{V-folder cross validation}}$ .  In $\text{V-}$folder cross validation, the data are partitioned into $V$ disjoint sets $\mathcal{D}_1,\, \dots \,\mathcal{D}_V$ , each of size approximately $\frac{N}{V}$ .
+In general, we use the <span style="color:pink; font-weight:bold;">V-folder cross validation</span>.  In $\text{V-}$folder cross validation, the data are partitioned into $V$ disjoint sets $\mathcal{D}_1,\, \dots \,\mathcal{D}_V$ , each of size approximately $\frac{N}{V}$ .
 
 <span class = 'lime'>A common choose in practice is 10-folder cross validation.</span>
 

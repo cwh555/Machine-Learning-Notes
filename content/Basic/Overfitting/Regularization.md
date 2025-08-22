@@ -2,10 +2,8 @@
 title: Regularization
 date: 2025-08-21
 ---
-
-## Setting
-We will use the $\text{\textbf{\textcolor{pink}{Legendre polynomials}}}$ .
-Consider the polynomial models in a space $\mathcal{Z}$ , under a nonlinear transformation $\Phi :\ \mathcal{X}\,\rightarrow\,\mathcal{Z}$ . Here, for the $Q$-th order polynomial mode, $\Phi$ transforms $x$ into a vector $z$ of Legendre polynomials,
+## Soft Constraint
+Consider the polynomial models in a space $\mathcal{Z}$ , under a nonlinear transformation $\Phi :\ \mathcal{X}\,\rightarrow\,\mathcal{Z}$ . Here, for the $Q$-th order polynomial mode, $\Phi$ transforms $x$ into a vector $z$ of Legendre polynomials.
 $$
 z\ =\ \begin{bmatrix}
 1 \\
@@ -14,6 +12,8 @@ L_1(x) \\
 L_Q(x)
 \end{bmatrix}
 $$
+We will use the <span style="color:pink; font-weight:bold;">Legendre polynomials</span> for the sake of its orthogonal property.
+
 Our hypothesis set 
 $$
 H_Q\ =\ \left\{ h\ :\ h(x)\,=\,w^T z\, =\, \sum_{q = 0}^{Q}\,w_q L_q(x) \right\}_{w\ \in\ \mathbb{R}^{Q + 1}}
@@ -22,8 +22,8 @@ We would like to minimize the squared error
 $$
 E_{in}(w)\ =\ \frac{1}{N} \sum_{n=1}^{N} \left( w^Tz_n\,-\,y_n \right)^2
 $$
-## Soft Constraint
-Define the $\text{\textbf{\textcolor{pink}{soft-order-constrainted}}}$ hypothesis set $\mathcal{H}(C)$ by
+
+Define the <span style="color:pink; font-weight:bold;">soft-order-constrainted</span> hypothesis set $\mathcal{H}(C)$ by
 $$
 \mathcal{H}(C)\ :=\ \left\{ h\ :\ h(x)\, =\, w^T z,\, w^T w\, \leq\,C \right\}
 $$
@@ -33,7 +33,7 @@ E_{in}(w)\ +\ \lambda_C\, w^T w
 $$
 
 > [!note] Discussion
-> A more general soft constraint is the $\text{\textbf{\textcolor{pink}{Tikhonov}}}$ regularization constraint
+> A more general soft constraint is the <span style="color:pink; font-weight:bold;">Tikhonov</span> regularization constraint
 > $$
 > w^T\,\Gamma^T\,\Gamma\,w\ \leq\ C
 > $$
@@ -42,14 +42,18 @@ $$
 > 
 
 ## Augmented Error
-In general, we define the $\text{\textbf{\textcolor{pink}{augmented error}}}$ for a hypothesis $h\,\in\,\mathcal{H}$ is 
+In general, we will use the <span style="color:pink; font-weight:bold;">augmented error</span> for a hypothesis $h\,\in\,\mathcal{H}$ is 
 $$
 E_{aug}(h,\,\lambda,\,\Omega)\ =\ E_{in}(h)\ +\ \frac{\lambda}{N}\Omega(h)\ .
 $$
-$\frac{\lambda}{N}\Omega(h)$ : is called the penalty term: the regularizer $\Omega(h)$  penalizes a particular property of $h$, and the $\text{\textbf{\textcolor{pink}{regularization parameter}}}\ \lambda$ represents the amount of regularization. Since the need for regularization goes down as the number of data points goes up, we factored out $\frac{1}{N}$ .
+$\frac{\lambda}{N}\Omega(h)$ : is called the penalty term
+- The regularizer $\Omega(h)$ penalizes a particular property of $h$.
+- The <span style="color:pink; font-weight:bold;">regularization parameter</span> $\lambda$ controls the strength of the penalty.
 
-For the $\text{\textbf{\textcolor{pink}{weight decay}}}$, $\Omega(h)\ =\ w^T w$ .
-The penalty term $\lambda w^T w$ is a form of $\text{\textbf{\textcolor{pink}{ridge regression}}}$ .
+Since the need for regularization goes down as the number of data points goes up, we factored out $\frac{1}{N}$ .
+
+For the <span style="color:pink; font-weight:bold;">weight decay</span>, $\Omega(h)\ =\ w^T w$ .
+The penalty term $\lambda w^T w$ is a form of <span style="color:pink; font-weight:bold;">ridge regression</span>.
 
 ## Empirical Perspectives
 <ul>
