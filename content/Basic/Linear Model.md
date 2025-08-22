@@ -2,13 +2,13 @@
 title: Linear Model
 date: 2025-08-21
 ---
-
+We present core supervised learning methods—linear classification, linear regression, and logistic regression—and discuss how nonlinear feature transforms can enhance model flexibility.
 ## Linear Classification
-We want to classification some data points $x$ by a linear model $h$.
+Linear classification aims to separate data points using a linear decision boundary. Here, we introduce the linear model, discuss when it works well, and present algorithms like the Perceptron and Pocket Algorithm to find effective classifiers.
 ### Model
 We use a hypothesis set of linear classifiers, where each h has the form
 $$
-h(x)\ =\ sign(w^T x)
+h(x)\ =\ sign(w^\top x)
 $$
 for some $w\ \in R^{d+1}$, where $d$ is the dimensionality of the input space.
 Note that we add coordinate $x_0\ =\ 1$ corresponds to the bias 'weight' $w_0$
@@ -27,7 +27,7 @@ Note that we add coordinate $x_0\ =\ 1$ corresponds to the bias 'weight' $w_0$
 ### Algorithm
 Because of noise, rather to solve $E_{in}\ =\ 0$, we would like to find a hypothesis with the minimum $E_{in}$ , we need to solve the combinatorial optimization problem:
 $$
-\min_{w\, \in\, \mathbb{R^{d+1}}} \frac{1}{N}\ \sum_{n\, =\, 1}^{N} \left[\!\left[ sign(w^Tx_n)\ \neq\ y_n \right]\!\right] 
+\min_{w\, \in\, \mathbb{R^{d+1}}} \frac{1}{N}\ \sum_{n\, =\, 1}^{N} \left[\!\left[ sign(w^\topx_n)\ \neq\ y_n \right]\!\right] 
 $$
 > [!abstract] **The Pocket Algorithm**
 > <div style="text-align:center;">
@@ -44,9 +44,11 @@ $$
 > </div>
 
 ## Linear Regression
+Linear regression models the relationship between inputs and a continuous output using a linear function. In this section, we introduce the linear model, discuss conditions for a feasible solution, and present algorithms to compute the optimal weights, including both closed-form and pseudo-inverse methods.
+
 ### Model
 $$
-h(x)\ =\ \sum_{i\,=\,0}^d w_ix_i\ =\ w^Tx
+h(x)\ =\ \sum_{i\,=\,0}^d w_ix_i\ =\ w^\top x
 $$
 where $x_0\ =\ 1$ and $x\ \in\ {1} \times\ \mathbb{R}^{d}$, $w\ \in\ \mathbb{R}^{d+1}$
 
@@ -70,7 +72,7 @@ $$
 Define the data matrix $X \in\ \mathbb{R}^{N\,\times\,(d+1)}$  whose rows are the inputs $x_n$ as row vectors.
 Define the target vector $y\ \in\ \mathbb{R}^N$.
 $$
-E_{in}\ =\ \frac{1}{N}\left( w^TX^TXw\,-\,2w^TX^Ty\,+\,y^Ty \right)
+E_{in}\ =\ \frac{1}{N}\left( w^\top X^\top Xw\,-\,2w^\top X^\top y\,+\,y^\top y \right)
 $$
 We want to solve the optimization problem:
 $$
@@ -78,28 +80,28 @@ w_{lin}\ =\ \underset{w\,\in\,\mathbb{R}^{d+1}}{argmin}\,E_{in}(w)
 $$
 To get $\nabla E_{in}(w)\ =\ 0$, one should solve for $w$ satisfies
 $$
-X^TXw\ =\ X^Ty
+X^\top Xw\ =\ X^\top y
 $$
-If $X^TX$ is invertible,
+If $X^\top X$ is invertible,
 >[!gray] Solution for invertible matrix
 >$$
->w\ =\ X^†y,\ \text{where}\ X^†\ =\ (X^TX)^{-1}X^T\ \text{is the}\ pseudo-inverse\ \text{of X}
+>w\ =\ X^†y,\ \text{where}\ X^†\ =\ (X^\top X)^{-1}X^\top \ \text{is the}\ pseudo-inverse\ \text{of X}
 >$$
 
-Otherwise, if $X^TX$ is not invertible,
+Otherwise, if $X^\top X$ is not invertible,
 Let $\rho$ be the rank of $X$.
-Assume that the SVD of $X$ is $X\ =\ U\Gamma V^T$, where
+Assume that the SVD of $X$ is $X\ =\ U\Gamma V^\top$, where
 $$
 \begin{aligned}
-U\ \in\ \mathbb{R}^{N \times \rho}\quad &\text{satisfies}\quad UU^T\ =\ I_{\rho} \\
-V\ \in\ \mathbb{R}^{(d+1)\,\times\,\rho}\quad &\text{satisfies}\quad V^TV\ =\ I_{\rho} \\
+U\ \in\ \mathbb{R}^{N \times \rho}\quad &\text{satisfies}\quad UU^\top\ =\ I_{\rho} \\
+V\ \in\ \mathbb{R}^{(d+1)\,\times\,\rho}\quad &\text{satisfies}\quad V^\top V\ =\ I_{\rho} \\
 \Gamma\ \in\ \mathbb{R}^{\rho \times \rho}\quad &\text{is a positive diagonal matrix}
 \end{aligned}
 $$
 Then,
 > [!gray] Solution for non-invertible matrix
 > $$
-> w_{lin}\ =\ V\,\Gamma^{-1}U^T\mathbf{y}\quad\quad \text{is a solution}
+> w_{lin}\ =\ V\,\Gamma^{-1}U^\top\mathbf{y}\quad\quad \text{is a solution}
 > $$
 
 #### Pseudo Code
@@ -110,18 +112,20 @@ Then,
 #### Others
 The  $\textbf{\textcolor{pink}{hat matrix}}$
 $$
-H\ =\ X\left( X^TX\right)^{-1}X^T
+H\ =\ X\left( X^\top X\right)^{-1}X^\top 
 $$
 has the properties that $H^2\ =\ H$, which can facilitate the analysis of error.
 
 
 ## Logistic Regression
+Logistic regression is a fundamental method for binary classification, estimating the probability that a given input belongs to a particular class. In this section, we introduce the logistic model, discuss how to measure prediction error using maximum likelihood and cross-entropy, and present algorithms such as batch and stochastic gradient descent for learning the model parameters.
+
 ### Description
 Given a data set $\mathcal{X}$  with data points $(x,\,y)$ , where $x$ is a vector and $y\ \in\ \{-1,\,1\}$. The logistic regression model is designed to estimate the probability $\mathbb{P}[y\ =\ 1\,|\,x]$ for a given input $x$.
 
 ### Model
 $$
-h(\mathbf{x})\ =\ \theta(w^Tx)
+h(\mathbf{x})\ =\ \theta(w^\top x)
 $$
 where $\theta$ is the so-called $\textbf{\textcolor{pink}{logistic}}$ function $\theta(s)\ =\ \frac{e^s}{1\,+\,e^s}$ .
 
@@ -160,7 +164,7 @@ The method of $\textbf{\textcolor{pink}{maximum likelihood}}$ selects the hypoth
 
 1.  For the reason of simplicity, we solve an equivalent problem: 
 $$
-E_{in}(w)\ =\ \frac{1}{N}\sum_{n\,=\,1}^{N}\ln{\left( \frac{1}{P(y_n\,|\,x_n)}\right)}\ =\ \frac{1}{N}\sum_{n\,=\,1}^{N} \ln{\left(1\ +\ e^{-y_nw^Tx_n}\right)}
+E_{in}(w)\ =\ \frac{1}{N}\sum_{n\,=\,1}^{N}\ln{\left( \frac{1}{P(y_n\,|\,x_n)}\right)}\ =\ \frac{1}{N}\sum_{n\,=\,1}^{N} \ln{\left(1\ +\ e^{-y_nw^\top x_n}\right)}
 $$
 2. $\textbf{\textcolor{pink}{Cross-entropy error measure}}$	
 	The maximum likelihood method reduces to the task of finding $h$ that minimizes
@@ -170,7 +174,7 @@ $$
 
 >[!blue] Discussion
 > $$
-> \nabla E_{in}(w)\ =\ -\frac{1}{N} \sum_{n\,=\,1}^{N} \frac{y_nx_n}{1\ +\ e^{y_xw^Tx_n}}
+> \nabla E_{in}(w)\ =\ -\frac{1}{N} \sum_{n\,=\,1}^{N} \frac{y_nx_n}{1\ +\ e^{y_xw^\top x_n}}
 > $$
 > A misclassified example contributes more to the gradient than a correctly classified one.
 
