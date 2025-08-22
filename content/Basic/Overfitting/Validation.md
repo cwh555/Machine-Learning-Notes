@@ -101,3 +101,58 @@ $$
 E_{cv}\ =\ \frac{1}{N} \sum_{n=1}^N \left( \frac{\hat{y}_n\ -\ y_n}{1\ -\ H_{nn}(\lambda)} \right)^2 .
 $$
 
+## More on Validation
+We add a "overfit penalty"to estimate the optimism bias of the in-sample error.
+### Rademacher Penalties
+Consider the data set 
+$$
+\mathcal{D}'\ =\ (x_1,\,r_1),\,\dots,\,(x_N,\,r_N)\ ,
+$$
+where $r_1,\,\dots,\,r_n$ are generated independently by a random target function, $\mathbb{P}[r_n\,=\,+1]\ =\ \frac{1}{2}$ . The $r_n$ are called Rademacher variables.
+After learning on $\mathcal{D}'$ you should produce a hypothesis $g_r$ with in-sample error $E_{in}'(g_r)$ .
+Using the measure of optimism for actual problem, we get the Rademacher estimate
+$$
+\hat{E}_{out}(g)\ =\ E_{in}(g)\ +\ \left(\frac{1}{2}\ -\ E_{in}'(g_r)\right)\ .
+$$
+### Permutation Optimism Penalty
+Consider a randomly permuted data set,
+$$
+\mathcal{D}_{\pi}\ =\ (x_1,\,y_{\pi_1}),\,\dots,\,(x_N,\,y_{\pi_N})\ .
+$$
+where $\pi$ is a random permutation of $(1,\,\dots,\,N)$ .
+Then, 
+$$
+\hat{E}_{out}(g)\ =\ E_{in}(g)\ +\ \frac{1}{2N}\,\sum_{n = 1}^N (y_{\pi_n}\ -\ \bar{y})\,g_{\pi}(x_n)\ .
+$$
+### Bootstrap Optimism Penalty
+It generates a random set of targets, one for each input, by sampling y-values in the data with replacement, which is different from permutation. Thus, the y-values represent the observed distribution.
+$\hat{E}_{out}$ is the same as Permutation Optimism Penalty.
+
+### Generalization Bound
+> [!green] <span style="color:pink; font-weight:bold;">Rademacher Bound</span>
+> With probability at least $1\,-\,\delta$
+> $$
+> E_{out}\,\leq\,E_{in}(g)\,+\,\max_{h\in \mathcal{H}}\{ \frac{1}{N}\sum_{n = 1}^N\,r_nh(x_n)\}\ +\ \mathcal{O}\left( \sqrt{\frac{1}{N} \log{\frac{1}{\delta}}} \right)\ .
+> $$
+
+### Out-of-sample Error Estimates for Regression
+Note that $p\ =\ \frac{N}{d_{eff}}$ denotes the number of data points per effective degree of freedom.
+
+> [!green] Error Estimate for Regression
+> - VC penalty factor 
+> $$
+> E_{out} \leq \frac{\sqrt{p}}{\sqrt{p} - \sqrt{1 + \ln{p} + \frac{\ln{N}}{2d_{eff}}}} \, E_{in}
+> $$
+> - Akaike's FPE
+> $$
+> E_{out} \approx \frac{p + 1}{p - 1}\,E_{in}
+> $$
+> - Schwartz criterion
+> $$
+> E_{out} \approx \left( 1\ +\ \frac{\ln{N}}{p\,-\,1}\right)\ E_{in}
+> $$
+> - Craven & Wahba's GCV
+> $$
+> E_{out} \approx \frac{p^2}{(p\,-\,1)^2}\ E_{in}
+> $$
+
