@@ -44,15 +44,14 @@ $$
 ## Augmented Error
 In general, we define the $\text{\textbf{\textcolor{pink}{augmented error}}}$ for a hypothesis $h\,\in\,\mathcal{H}$ is 
 $$
-E_aug(h,\,\lambda,\,\Omega)\ =\ E_{in}(h)\ +\ \frac{\lambda}{N}\Omega(h)\ .
+E_{aug}(h,\,\lambda,\,\Omega)\ =\ E_{in}(h)\ +\ \frac{\lambda}{N}\Omega(h)\ .
 $$
 $\frac{\lambda}{N}\Omega(h)$ : is called the penalty term: the regularizer $\Omega(h)$  penalizes a particular property of $h$, and the $\text{\textbf{\textcolor{pink}{regularization parameter}}}\ \lambda$ represents the amount of regularization. Since the need for regularization goes down as the number of data points goes up, we factored out $\frac{1}{N}$ .
 
 For the $\text{\textbf{\textcolor{pink}{weight decay}}}$, $\Omega(h)\ =\ w^T w$ .
 The penalty term $\lambda w^T w$ is a form of $\text{\textbf{\textcolor{pink}{ridge regression}}}$ .
 
-## Summary
-In empirical observations, 
+## Empirical Perspectives
 <ul>
 <li class="lime">The best way to constrain the learning is in the direction of the target function.</li>
 <li class="lime">The more noise, the more constraint is needed.</li>
