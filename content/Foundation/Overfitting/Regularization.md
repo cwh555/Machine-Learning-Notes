@@ -55,6 +55,12 @@ Since the need for regularization goes down as the number of data points goes up
 For the <span style="color:pink; font-weight:bold;">weight decay</span>, $\Omega(h)\ =\ w^T w$ .
 The penalty term $\lambda w^T w$ is a form of <span style="color:pink; font-weight:bold;">ridge regression</span>.
 
+### Weight Based Complexity Penalties
+$\textbf{\textcolor{pink}{Squared weight decay regularizer}}$
+$$E_{aug}(w)\ =\ E_{in}(w)\ +\ \frac{\lambda}{N}\,\sum_{l,i,j} \left( w_{ij}^{(l)}\right)^2$$
+$\textbf{\textcolor{pink}{Weight Elimination}}$
+$$E_{aug}(w\,\lambda)\ =\ E_{in}(w)\ +\ \frac{\lambda}{N}\,\sum_{l,i,j}\, \frac{\left( w_{ij}^{(l)}\right)^2}{1\,+\, \left(w_{ij}^{(l)}\right)^2}$$
+
 ## Empirical Perspectives
 <ul>
 <li class="lime">The best way to constrain the learning is in the direction of the target function.</li>

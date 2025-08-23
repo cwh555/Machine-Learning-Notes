@@ -3,16 +3,16 @@ title: Hints and Invariances
 date: 2025-08-22
 ---
 ## Examples
-- $\textbf{Symmetry or Anti-symmetry hints}$
-- $\textbf{Rotational Invariance hints}$
+- **Symmetry or Anti-symmetry hints**
+- **Rotational Invariance hints**  
 	$f(x)$ depends only on $\|x\|$ .
-- $\textbf{General Invariance hints}$ <br>
+- **General Invariance hints**  
 	For some transformation $\mathcal{T}$ , $f(x)\ =\ f(\mathcal{T}x)$ . Invariance to scale, shift and rotation of an image are common in vision applications.
-- $\textbf{Monotonicity hints}$ <br>
+- **Monotonicity hints**  
 	$f(x\,+\,\Delta x)\ \geq\ f(x)$ if $\Delta x\,\geq\,0$ .
-- $\textbf{Convexity hint}$ <br>
+- **Convexity hint**  
 	$f(\eta x\,+\,(1\,-\,\eta)\,x')\ \leq\ \eta f(x)\, +\, (1\,-\,\eta)f(x')$ for $0\,\leq\,\eta\,\leq\,1$ .
-- $\textbf{Perturbation hint}$ <br>
+- **Perturbation hint**  
 	$f$ is closer to a known function $g$, so $f\,=\,g\,+\,\delta f$ .
 
 ## Virtual Examples

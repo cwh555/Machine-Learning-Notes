@@ -6,9 +6,9 @@ date: 2025-08-22
 Centering deals with bias.
 Consider the transformation
 $$
-Z\ =\ X\ -\ 1\bar{x}^T
+Z\ =\ X\ -\ 1\bar{x}^\top
 $$
-After centering, $Z^T \textbf{1} =\ 0$ .
+After centering, $Z^\top \textbf{1} =\ 0$ .
 
 ## Input Normalization
 Normalization deals with scale.
@@ -21,12 +21,12 @@ After normalization, $\sigma_i^2(z)\ = 1$ .
 
 ## Input Whitening
 Whitening deals with correlations since strongly correlated input variables can have unexpected outcome.
-Let $\Sigma\ =\ \frac{1}{N}X^TX$ be the covariance matrix. Note that the data had been centered.
+Let $\Sigma\ =\ \frac{1}{N}X^\top X$ be the covariance matrix. Note that the data had been centered.
 Consider the transformation
 $$
 z_n\ =\ \Sigma^{-\frac{1}{2}}\,x_n\ .
 $$
-After whitening, $\frac{1}{N} Z^TZ\ =\ I$ .
+After whitening, $\frac{1}{N} Z^\top Z\ =\ I$ .
 
 ## Data Cleaning
 ### Use a Simpler Model
