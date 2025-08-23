@@ -7,13 +7,13 @@ date: 2025-08-23
 #### Separating hyperplanes
 The hyperplane $h$ separates the data if and only if it can be represented by weights $(b, w)$ that satisfy
 $$
-\min_{n=1,\dots,N}{\ y_n(w^Tx_n\,+\,b)}\ =\ 1
+\min_{n=1,\dots,N}{\ y_n(w^\top x_n\,+\,b)}\ =\ 1
 $$
 #### Margin of a hyperplane
 The distance from $x$ to $h$ is
 $$
 \begin{aligned}
-dist(x,h)\ =\ \frac{|w^Tx_n\,+\,b|}{\|w\|}\ =\ \frac{y_n(w^Tx_n\,+\,b)}{\|w\|}\\\\
+dist(x,h)\ =\ \frac{|w^\top x_n\,+\,b|}{\|w\|}\ =\ \frac{y_n(w^\top x_n\,+\,b)}{\|w\|}\\\\
 \implies \min_{n=1\dots N}{dist(x_n, h)}\ =\ \frac{1}{\|w\|}\ .
 \end{aligned}
 $$
@@ -22,15 +22,15 @@ $$
 We need to solve the following optimization problem.
 $$
 \begin{aligned}
-\underset{b, w}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize w^Tw\\\\
-subject\ to&:\qquad \min_{n=1\dots N}{\ y_n\,(w^Tx_n\,+\,b)\ =\ 1}.
+\underset{b, w}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize w^\top w\\\\
+subject\ to&:\qquad \min_{n=1\dots N}{\ y_n\,(w^\top x_n\,+\,b)\ =\ 1}.
 \end{aligned}
 $$
 This is equivalent to solve the optimization problem as follows at the optimal solution.
 $$
 \begin{aligned}
-\underset{b, w}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize w^Tw\\\\
-subject\ to&:\qquad \min_{n=1\dots N}{\ y_n\,(w^Tx_n\,+\,b)\ \geq\ 1}.
+\underset{b, w}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize w^\top w\\\\
+subject\ to&:\qquad \min_{n=1\dots N}{\ y_n\,(w^\top x_n\,+\,b)\ \geq\ 1}.
 \end{aligned}
 $$
 
@@ -38,8 +38,8 @@ $$
 	Standard form:
 $$
 \begin{aligned}
-\underset{u\in \mathbb{R}^L}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize u^TQ\,u\ +\ p^T u\\\\
-subject\ to&:\qquad a_m^Tu\ \geq\ c_m \quad (m = 1,\,\dots,\,M).
+\underset{u\in \mathbb{R}^L}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize u^\top Q\,u\ +\ p^\top u\\\\
+subject\ to&:\qquad a_m^\top u\ \geq\ c_m \quad (m = 1,\,\dots,\,M).
 \end{aligned}
 $$
 For the QP-problem to be convex, the matrix $Q$ must to be positive semi-definite.  
@@ -81,13 +81,13 @@ The dual SVM problem is equivalent to the original primal problem. However, the 
 For a feasible convex QP-problem in primal form, 
 $$
 \begin{aligned}
-\underset{u\in \mathbb{R}^L}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize u^TQ\,u\ +\ p^T u\\\\
-subject\ to&:\qquad a_m^Tu\ \geq\ c_m \quad (m = 1,\,\dots,\,M).
+\underset{u\in \mathbb{R}^L}{minimize}&:\qquad \tiny\frac{1}{2}\normalsize u^\top Q\,u\ +\ p^\top u\\\\
+subject\ to&:\qquad a_m^\top u\ \geq\ c_m \quad (m = 1,\,\dots,\,M).
 \end{aligned}
 $$
 define the Lagrange function
 $$
-\mathcal{L}(u, \alpha)\ =\ \frac{1}{2} u^T Q u\ +\ p^T u\ +\ \sum_{m=1}^{M}\,\alpha_m (c_m\,-\,a_m^T u)\ .
+\mathcal{L}(u, \alpha)\ =\ \frac{1}{2} u^\top Q u\ +\ p^\top u\ +\ \sum_{m=1}^{M}\,\alpha_m (c_m\,-\,a_m^\top u)\ .
 $$
 The solution $u^*$ is optimal for the primal iff. $(u^*, \alpha^*)$ is a solution to the dual optimization problem
 $$
@@ -96,11 +96,11 @@ $$
 The optimal $(u^*, \alpha^*)$ satisfies the **Karush-Kuhn-Tucker** conditions :
 $(i)\ \textit{Primal and dual constraints:}$
 $$
-a_m^T u^*\ \geq\ c_m\quad \text{and} \quad \alpha_m\ \geq\ 0.
+a_m^\top u^*\ \geq\ c_m\quad \text{and} \quad \alpha_m\ \geq\ 0.
 $$
 $(ii)\ \textit{Complementary slackness}:$
 $$
-\alpha^*_m\,(a_m^T\,u^*\ -\ c_m)\ =\ 0\ .
+\alpha^*_m\,(a_m^\top\,u^*\ -\ c_m)\ =\ 0\ .
 $$
 $\textit{(iii) Stationarity with respect to }u :$
 $$
@@ -111,7 +111,7 @@ $$
 Apply the KKT theorem to the convex QP-problem for hard-margin SVM, we have the following optimization problem to solve.
 $$
 \begin{aligned}
-\underset{\alpha \in \mathbb{R}^{N}}{minimize}:&\qquad \frac{1}{2} \sum_{m = 1}^{N} \sum_{n = 1}^{N}\ y_n\,y_m\,\alpha_n\,\alpha_m\,x_n^T\,x_m\ -\ \sum_{n = 1}^N\ \alpha_n\\\\
+\underset{\alpha \in \mathbb{R}^{N}}{minimize}:&\qquad \frac{1}{2} \sum_{m = 1}^{N} \sum_{n = 1}^{N}\ y_n\,y_m\,\alpha_n\,\alpha_m\,x_n^\top\,x_m\ -\ \sum_{n = 1}^N\ \alpha_n\\\\
 
 \text{subject to :}&\qquad \sum_{n = 1}^N\ y_n\,\alpha_n
 \ =\ 0\\\\
@@ -124,10 +124,10 @@ By solving the dual problem,
 $$
 w^*\ =\ \sum_{n = 1}^N\ y_n\,\alpha^*_n\,x_n\ .
 $$
-Assume that the data contains at least one positive and one negative example. Then, at least one of the $\alpha^*_s$ must be strictly positive. As a result, $y_s\,(w^{*T}x_s\ +\ b^*)\ =\ 1$ .
-We can solve $b^*\, =\, y_s\, -\, w^{*T}x_s$ .
+Assume that the data contains at least one positive and one negative example. Then, at least one of the $\alpha^*_s$ must be strictly positive. As a result, $y_s\,(w^{*\top}x_s\ +\ b^*)\ =\ 1$ .
+We can solve $b^*\, =\, y_s\, -\, w^{*\top}x_s$ .
 
-Note that the optimal hypothesis is $g(x)\ =\ sign\left( w^{*T}x\ +\ b^* \right)$ .
+Note that the optimal hypothesis is $g(x)\ =\ sign\left( w^{*\top}x\ +\ b^* \right)$ .
 <div style="text-align:center;">
 <img src="https://i.imgur.com/7FNDv7j.jpeg" alt="Example Image" style="height: 500px;">
 </div>
@@ -138,9 +138,9 @@ E_{cv}\ \leq\ \frac{\text{number of }\alpha^*_m\ \gt\ 0}{N}\ .
 $$
 ## Kernel Trick for SVM
 ### Introduction
-Consider a linear transform $\Phi :\ \mathcal{X}\ \rightarrow\ \mathcal{Z}$ , which can be done by replacing $x$ by $z\ =\ \Phi(x)$ in the algorithm before. Throughout the procedure, the only step related to $\Phi$ is $z^Tz'$ in the final hypothesis. As a result, we may define a function that both combines the transform and the inner product. 
+Consider a linear transform $\Phi :\ \mathcal{X}\ \rightarrow\ \mathcal{Z}$ , which can be done by replacing $x$ by $z\ =\ \Phi(x)$ in the algorithm before. Throughout the procedure, the only step related to $\Phi$ is $z^\top z'$ in the final hypothesis. As a result, we may define a function that both combines the transform and the inner product. 
 $$
-K_{\Phi}(x,\,x')\ \equiv\ \Phi(x)^T\,\Phi(x')\ .
+K_{\Phi}(x,\,x')\ \equiv\ \Phi(x)^\top \,\Phi(x')\ .
 $$
 This function is called a <span style="color:pink; font-weight:bold;">kernel function</span> . Finding a kernel function is just like using a transformation $\Phi$ . Moreover, the efficiency of kernel would be related to $d$ , rather than the dimension $\tilde{d}$ when we transform to $\mathcal{Z}$ explicitly.
 <div style="text-align:center;">
@@ -154,11 +154,11 @@ $$
 $$
 We may calculate $\Phi_2(x)^T\,\Phi_2(x')$ by an equivalent function
 $$
-K(x,\,x')\ =\ 1\ +\ (x^Tx')\ +\ (x^Tx')^2\ .
+K(x,\,x')\ =\ 1\ +\ (x^\top x')\ +\ (x^\top x')^2\ .
 $$
 - <span style="color:pink; font-weight:bold;">Degree-Q Polynomial Kernel</span>
 $$
-K(x,\,x')\ =\ (\zeta\ +\ \gamma x^T x')^Q\ ,
+K(x,\,x')\ =\ (\zeta\ +\ \gamma x^\top x')^Q\ ,
 $$
 where $\gamma\ >\ 0,\ \zeta\ >\ 0,\ \text{and}\ Q\,\in\,\mathbb{N}\ .$
 
@@ -202,33 +202,33 @@ Note that the matrix should be positive semi-definite. The matrix should satisfi
 
 ## Soft-Margin SVM
 ### Concept
-Introduce an amount of margin violation $\xi_n\ \geq\ 0$ for each data point $(x_n, y_n)$ and require that $y_n (w^Tx_n\ +\ b)\ \geq\ 1\ -\ \xi\ .$  
+Introduce an amount of margin violation $\xi_n\ \geq\ 0$ for each data point $(x_n, y_n)$ and require that $y_n (w^\top x_n\ +\ b)\ \geq\ 1\ -\ \xi\ .$  
 
 The soft-margin optimization problem is :
 $$
 \begin{aligned}
-\min_{w, b, \xi}\qquad &\frac{1}{2}w^T w\ +\ C\,\sum_{n = 1}^N\,\xi_n\\
-\text{subject to}\qquad &y_n(w^Tx_n\ +\ b)\ \geq\ 1\ -\ \xi_n\ for\ n\,=\,1,\,2,\,\dots,\,N\,;\\
+\min_{w, b, \xi}\qquad &\frac{1}{2}w^\top w\ +\ C\,\sum_{n = 1}^N\,\xi_n\\
+\text{subject to}\qquad &y_n(w^\top x_n\ +\ b)\ \geq\ 1\ -\ \xi_n\ for\ n\,=\,1,\,2,\,\dots,\,N\,;\\
 &\xi_n\ \geq\ 0\ for\ n\,=\,1,\,2,\,\dots,\,N\ .
 \end{aligned}
 $$
 ### Dual Problem
 The Lagrange function is 
 $$
-\mathcal{L}(b,\,w,\,\xi,\,\alpha,\,\beta)\ =\ \frac{1}{2} w^T w\ +\ C\sum_{n = 1}^N\,\xi_n\ +\ \sum_{n = 1}^N\,\alpha_n(1\, -\, \xi_n\, -\, y_n(w^T x_n\,+\,b))\ -\ \sum_{n=1}^N\beta_n\xi_n
+\mathcal{L}(b,\,w,\,\xi,\,\alpha,\,\beta)\ =\ \frac{1}{2} w^\top w\ +\ C\sum_{n = 1}^N\,\xi_n\ +\ \sum_{n = 1}^N\,\alpha_n(1\, -\, \xi_n\, -\, y_n(w^\top x_n\,+\,b))\ -\ \sum_{n=1}^N\beta_n\xi_n
 $$
 
 Using the $\textbf{KKT condition}$ , the Lagrange dual problem simplifies to 
 $$
 \max_{\substack{\alpha\,\geq\,0\ \beta\,\geq\,0\\ \alpha_n\ +\ \beta_n\ =\ C}}\quad \min_{b, w, \xi} \quad \mathcal{L}(b, w, \xi, \alpha)
 $$
-where $\mathcal{L}\ =\ \frac{1}{2} w^T w\ +\ \sum_{n = 1}^N\,\alpha_n(1\,-\,y_n(w^Tx_n\,+\,b))$ .
+where $\mathcal{L}\ =\ \frac{1}{2} w^\top w\ +\ \sum_{n = 1}^N\,\alpha_n(1\,-\,y_n(w^\top x_n\,+\,b))$ .
 
 The dual problem is
 $$
 \begin{aligned}
-\min_{\alpha} \qquad &\frac{1}{2} \alpha^T Q_D\, \alpha\ -\ 1^T \alpha\\\\
-\text{subject to } \qquad &y^T\,\alpha\ =\ 0\,;\\
+\min_{\alpha} \qquad &\frac{1}{2} \alpha^\top Q_D\, \alpha\ -\ 1^\top \alpha\\\\
+\text{subject to } \qquad &y^\top\,\alpha\ =\ 0\,;\\
 &0\ \leq\ \alpha\ \leq\ C \cdot 1\ .
 \end{aligned}
 $$
@@ -237,11 +237,11 @@ The support vector with $\alpha^*_n\ =\ C$ are called the bounded support vector
 
 ### Viewpoint in Regularization
 $$
-E_{SVM}(b,\,w)\ =\ \frac{1}{N} \sum_{n = 1}^N\,max\{\ 1 - y_n(w^Tx_n\ +\ b),\, 0\ \}\ .
+E_{SVM}(b,\,w)\ =\ \frac{1}{N} \sum_{n = 1}^N\,max\{\ 1 - y_n(w^\top x_n\ +\ b),\, 0\ \}\ .
 $$
 Minimize the soft-margin SVM can be re-written as the following optimization problem 
 $$
-\min_{b,\,w}\ \lambda w^T w\ +\ E_{SVM}(b,\,w)
+\min_{b,\,w}\ \lambda w^\top w\ +\ E_{SVM}(b,\,w)
 $$
 subjects to the constraints, and where $\lambda\ =\ \frac{1}{2}CN$ .
 
