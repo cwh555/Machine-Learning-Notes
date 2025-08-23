@@ -1,3 +1,8 @@
+---
+title: Three Learning Principles
+date: 2025-08-23
+---
+
 -  **Occam's Razor**  
 	The simplest model that fits the data is also the most plausible.
 - **Axiom of Non-falsifiablity**  
