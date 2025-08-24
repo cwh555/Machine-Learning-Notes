@@ -1,5 +1,5 @@
 ---
-title: Multi-layer Neural Networks
+title: Multilayer Neural Networks
 date: 2025-08-23
 ---
 ## Forward propagation
@@ -63,3 +63,56 @@ We greedily pick the first layer weights, fix them, and then move on to the seco
 <span class = 'lime'>A common tactic is to use the unsupervised auto-encode first to set the weights and then fine tune the whole network using supervised learning.</span>
 
 
+## Hidden Units
+### Rectified Linear Unit (ReLU)
+$$
+g(z)\ =\ \max\{ 0,\,z \}
+$$
+One drawback is that they cannot learn via gradient-based methods on examples for which their activation is zero.
+
+Three generalizations are based on using a non-zero slope $\alpha_i$ when $z_i < 0$
+$$
+h_i\ =\ g(x,\,\alpha)_i\ =\ \max(0,\,z_i)\ +\ \alpha_i\min(0,\,z)
+$$
+- **Absolute value rectification**: $\alpha_i\ =\ -1\ \implies\ g(z)\ =\ |z|$.
+- **Leaky ReLU**: fixes $\alpha_i$ to small value, like $\alpha_i\ =\ 0.01$
+- **Parametric ReLU**: treat $\alpha_i$ as a learnable parameter
+
+#### Maxout Units
+Maxout units divide $z$ into groups of $k$ values.
+$$
+g(z)_i\ =\ \max_{j\,\in\,\mathbb{G}^{(i)}}z_j
+$$
+where $\mathbb{G}^{(i)}$ is the set of indices into the inputs for group $i$.
+> For example, $z=[1.2,−0.5,3.0,0.9,2.1,−1.1]$ and we divide to three group.
+> $$
+> G^{(1)}=\{0,1\},\ G^{(2)}=\{2,3\},\ G^{(3)}=\{4,5\}
+> $$
+> Then 
+> $$
+> g(z)\,=\,[\max(1.2,−0.5),\,\max(3.0,0.9),\,\max(2.1,−1.1)]\,=\,[1.2,3.0,2.1]
+> $$
+
+### Softplus
+$$
+g(a)\ =\ \zeta(a)\ =\ \log(1\,+\,e^a)
+$$
+However, it does not work well empirically.
+
+### Hard tanh
+$$
+g(a)\ =\ \max(-1,\,\min(1, a))
+$$
+
+## Universal Approximation Properties
+[[Theory#Universal Approximation Theorem]]
+
+*Montufar et al.*:   
+The number of linear regions carved out by a deep rectifier network with $d$ inputs, depth $l$, and $n$ units per hidden layer, is
+$$
+\mathcal{O}\left( \binom{n}{d}^{d(l - 1)}n^d \right)
+$$
+In the case of maxout networks with $k$ filters per unit, the number of linear regions is
+$$
+\mathcal{O}\left( k^{(l - 1) + d} \right)
+$$

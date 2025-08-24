@@ -198,7 +198,23 @@ K(x_N,\,x_1) & K(x_N,\,x_2) & \dots & K(x_N,\,x_N)
 $$
 Note that the matrix should be positive semi-definite. The matrix should satisfies <span style="color:pink; font-weight:bold;">Mercer's condition</span>
 > [!gray] Mercer's condition
-> $K(x,\, x')$ is a valid kernel function iff. the kernel matrix $K$ is always symmetric PSD for any given $\{x1_1,\,\dots,\,x_N\}$.
+> $K(x,\, x')$ is a valid kernel function iff. the kernel matrix $K$ is always symmetric PSD for any given $\{x_1,\,\dots,\,x_N\}$.
+
+### Mercer's Theorem
+Mercer's Theorem tells us whether or not a candidate kernel is actually an inner-product kernel in some space therefore admissible for use in a support vector machine.
+
+Let $K(x, x')$ be a continuous symmetric kernel that is defined in the closed interval $a \leq x \leq b$ and likewise for $x'$. The kernel $K(x, x')$ can be expanded in the series:
+$$
+K(x, x')\ =\ \sum_{i = 1}^{\infty} \lambda_i \varphi_i(x)\varphi_i(x')
+$$
+with positive coefficients, $\lambda_i > 0$ for all $i$. For this expansion to be valid and for it to converge absolutely and uniformly, it is necessary and sufficient that the condition
+$$
+\int_{a}^b\int_a^b K(x, x')\psi(x)\psi(x')dxdx'\ \geq\ 0
+$$
+holds for all $\psi(\cdot)$ for which
+$$
+\int_b^a \psi^2(x) dx\ <\ \infty
+$$
 
 ## Soft-Margin SVM
 ### Concept
@@ -250,3 +266,13 @@ subjects to the constraints, and where $\lambda\ =\ \frac{1}{2}CN$ .
 2. Deal with high or infinite-dimensional transforms using the kernel trick.
 3. Express the final hypothesis using only a few support vectors, their corresponding Lagrange multipliers, and the kernel.
 4. Control the sensitivity to outliers, the regularize the solution through setting C appropriately.
+
+## Applications : Nonlinear regression
+Foundation: $\epsilon$**-insensitive loss function**
+$$
+L_{\epsilon}(d, y)\ =\ 
+\begin{cases} 
+|d - y| - \epsilon,\qquad &\text{for }|d - y| \geq\ \epsilon\\\\
+0, &\text{otherwise}
+\end{cases}
+$$
