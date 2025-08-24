@@ -1,6 +1,8 @@
 ---
 title: Similarity-Based Methods
 date: 2025-08-23
+tags:
+  - EM
 ---
 ## Similarity
 ### Similarity measures
