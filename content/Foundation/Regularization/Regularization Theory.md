@@ -1,3 +1,8 @@
+---
+title: Regularization Theory
+date: 2025-10-01
+---
+
 Tikhonov proposed a new method called *regularization* for solving ill-posed problems.
 
 Let the set of input-output data (i.e. training sample) available for approximation be described by
@@ -103,7 +108,7 @@ To solve the partial differential equation in the `Equation (5.33)`, we introduc
 > \mathbf{L}F(x)\ =\ \varphi(x)
 > $$
 
-## Solution to the Regularization Problem
+## Solution
 Setting
 $$
 \begin{aligned}
@@ -119,3 +124,69 @@ Using the sifting property of the Dirac delta function,
 
 This equation states that the solution to the regularization problem is a linear superposition of $N$ Green's function.
 The $x_i$ represents the *centers* of the *expansion*, and the weights $[d_i - F(x_i)]/\lambda$ represent the *coefficients* of the expansion.
+
+## Regularization Parameter
+Consider a nonlinear regression problem
+$$
+y_i\ =\ f(x_i)\ +\ \epsilon_i,\qquad i\ =\ 1, 2,\dots, N
+$$
+where $f$ is a smooth curve, and $\epsilon_i$ is a sample drawn from a white noise process zero mean and variance $\sigma^2$. That is
+$$
+E[\epsilon_i]\ =\ 0\qquad \text{for all } i
+$$
+and
+$$
+E[\epsilon_i\,\epsilon_k]\ =\ 
+\begin{cases}
+\sigma^2\qquad &\text{for }k\ =\ i\\\\
+0\qquad &\text{otherwise}
+\end{cases}
+$$
+The problem is to reconstruct the function $f$, given the training sample $\{ (x_i,\,y_i) \}_{i = 1}^N$.
+
+Let $F_\lambda(x)$ be the regularized estimate of $f(x)$ for some value of the regularization parameter $\lambda$. That is, $F_\lambda$ is the minimizer of the Tikhonov functional.
+$$
+\mathscr{E}(F)\ =\ \frac{1}{2}\,\sum_{i = 1}^N\,[y_i\ -\ F(x_i)]^2\ +| \frac{\lambda}{2}\|\mathbf{D}F(x)\|^2
+$$
+
+Let $R(\lambda)$ denote the average squared error over a given data set between two functions: $f$ and $F_\lambda$. That is,
+$$
+R(\lambda)\ =\ \frac{1}{N}\,\sum_{i = 1}^N\,[f(x_i)\ -\ F_\lambda(x_i)]^2
+$$
+The optimum $\lambda$ is the particular value of $\lambda$ that minimizes $R(\lambda)$.
+
+Let $F_\lambda(x_k)$ be expressed as a linear combination of the given set of observable as follows:
+$$
+F_\lambda{x_k}\ =\ \sum_{i = 1}^N\,a_{ki}(\lambda)y_i
+$$
+In matrix form,
+$$
+\mathbf{F}_\lambda\ =\ \mathbf{A}(\lambda)\mathbf{y}
+$$
+We may rewrite the equation of $R(\lambda)$ as
+![[截圖 2025-10-13 上午9.18.39.png]]
+
+Substituting $\mathbf{y} = \mathbf{f}\ +\ \mathbf{\epsilon}$, 
+![[截圖 2025-10-13 上午9.19.29.png]]
+- The first term is a constant.
+- The expectation of the second term is zero
+- The expectation of the third term is
+$$
+\begin{aligned}
+E[\| \mathbf{A}(\lambda)\,\mathbf{\epsilon} \|^2]\ &=\ tr\{ E[\,\epsilon^\top A^\top(\lambda)\,A(\lambda)\,\epsilon  \,] \}\\\\
+&=\ E[\, tr[\epsilon^\top A^\top(\lambda)\,A(\lambda)\,\epsilon] \,]\\\\
+&=\ E[\, tr[A^\top(\lambda) A(\lambda)\, \epsilon\,\epsilon^\top ] \,]\\\\
+&=\ \sigma^2\,tr[A^\top(\lambda)A(\lambda)]
+\end{aligned}
+$$
+In conclusion,
+![[截圖 2025-10-13 上午9.25.00.png]]
+
+But this required the knowledge of the regression function $f$, which is known. Consequently, we will use the following estimation in practice.
+![[截圖 2025-10-13 上午9.26.00.png]]
+
+We may show that
+$$
+E[\hat{R}(\lambda)]\ =\ E[R(\lambda)]
+$$
+Accordingly, the minimizer of the estimator $\hat{R}(\lambda)$ can be a good choice for the regularization parameter.
