@@ -55,3 +55,21 @@
 .lime {
   color: rgba(0, 255, 0, 0.799)  !important;
 }
+
+div[src$="#right"] {
+    text-align:right;
+}
+div[src$="#center"] {
+    text-align:center;
+}
+div[src$="#left"] {
+    text-align:left;
+}
+
+/* Quartz Header Colors */
+h1 { color: #e06c75; }
+h2 { color: #dc781c; }
+h3 { color: #ebd591; }
+h4 { color: #98c379; }
+h5 { color: #56b6c2; }
+h6 { color: #c678dd; }
