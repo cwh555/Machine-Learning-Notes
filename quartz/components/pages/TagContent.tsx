@@ -117,12 +117,12 @@ export default ((opts?: Partial<TagContentOptions>) => {
       return (
         <div class="popover-hint">
           <article class={classes}>{content}</article>
-          <div class="page-listing">
+          {/* <div class="page-listing">
             <p>{i18n(cfg.locale).pages.tagContent.itemsUnderTag({ count: pages.length })}</p>
             <div>
               <PageList {...listProps} sort={options?.sort} />
             </div>
-          </div>
+          </div> */}
         </div>
       )
     }
