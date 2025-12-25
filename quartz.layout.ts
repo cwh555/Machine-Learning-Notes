@@ -119,7 +119,7 @@ export const defaultListPageLayout: PageLayout = {
     Component.Explorer({
       filterFn: (node) => {
         if (node.slugSegment === "tags") return false
-        if (node.data) return !node.data.tags?.includes("hide")
+        if (node.data?.properties?.includes("hide")) return false
         return true
       }
     }),
