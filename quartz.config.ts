@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "https://cwh555.github.io/Machine-Learning-Notes/",
+    baseUrl: "cwh555.github.io/Machine-Learning-Notes/",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {

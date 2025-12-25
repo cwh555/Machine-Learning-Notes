@@ -1,8 +1,10 @@
 ---
 title: Criterion
 date: 2025-10-21
-tags:
+properties:
   - hide
+tags:
+  - test
 ---
 ## Classification
 ### Multi-class SVM score
