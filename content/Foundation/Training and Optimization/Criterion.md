@@ -4,7 +4,6 @@ date: 2025-10-21
 properties:
   - hide
 tags:
-  - test
 ---
 ## Classification
 ### Multi-class SVM score

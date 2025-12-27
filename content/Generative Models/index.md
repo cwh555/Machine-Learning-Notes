@@ -1,8 +1,6 @@
 ---
 title: Generative Model
 ---
-## AutoEncoder Series
-
-## GAN Series
-
-## Diffusion Models
+This is a redirect page. For more details on each subject, please visit:
+- [[dir_model|Generative Models]]
+- [[dir_evaluation|Evaluation Metrics]]

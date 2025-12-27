@@ -51,19 +51,21 @@
   padding: 10px;
 }
 
-
-.lime {
-  color: rgba(0, 255, 0, 0.799)  !important;
+img[alt$="center"] {
+  display: block;
+  margin: 0 auto;
 }
 
-div[src$="#right"] {
-    text-align:right;
+img[alt$="right"] {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
 }
-div[src$="#center"] {
-    text-align:center;
-}
-div[src$="#left"] {
-    text-align:left;
+
+img[alt$="left"] {
+  display: block;
+  margin-right: auto;
+  margin-left: 0;
 }
 
 /* Quartz Header Colors */
@@ -73,3 +75,61 @@ h3 { color: #ebd591; }
 h4 { color: #98c379; }
 h5 { color: #56b6c2; }
 h6 { color: #c678dd; }
+
+/* 針對 > [!pink] 的樣式設定 */
+.callout[data-callout="pink"] {
+  background-color: transparent !important; /* 去背 */
+  border: none !important;       /* 去框 */
+  box-shadow: none !important;   /* 去陰影 */
+  padding: 0 !important;         /* 去除整體的內距 */
+  margin: 1rem 0;                /* 保持一點上下的外距，避免貼太近 */
+
+  /* 隱藏標題列 (icon 和標題文字) */
+  .callout-title {
+    display: none !important;
+  }
+
+  /* 設定內容樣式 */
+  .callout-content {
+    color: #ff69b4 !important; /* 設定文字顏色 */
+    padding: 0 !important;     /* 去除內容區塊的內距 */
+    border: none !important;   /* 確保沒有左側的顏色條 */
+
+    /* 修正內部的段落間距 */
+    p {
+      margin-top: 0;
+      color: inherit; /* 繼承上面的粉紅色 */
+    }
+
+    /* 重要：強制讓 KaTeX (數學公式) 也變色 */
+    .katex, .katex-display {
+      color: #ff69b4 !important;
+    }
+    
+    /* 針對行內公式的微調 */
+    .katex-html {
+        color: #ff69b4 !important;
+    }
+  }
+}
+
+.callout[data-callout="lime"] {
+    background-color: transparent !important; /* 去除背景 */
+    border: none !important;       /* 去除邊框 */
+    box-shadow: none !important;   /* 去除陰影 */
+    margin: 0 !important;          /* 去除外距 */
+    padding: 0 !important;         /* 去除內距 */
+}
+
+.callout[data-callout="lime"] .callout-title {
+    display: none !important;
+}
+
+.callout[data-callout="lime"] .callout-content,
+.callout[data-callout="lime"] .callout-content p,
+.callout[data-callout="lime"] .callout-content .MathJax,
+.callout[data-callout="lime"] .callout-content .jax-element {
+    color: #00FF00 !important;
+    line-height: 1.5;
+}
+

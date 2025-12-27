@@ -95,7 +95,6 @@ export const defaultContentPageLayout: PageLayout = {
       },
     }),
     Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
   ],
   // Standard body for content pages
   pageBody: Component.Content(), 
@@ -124,5 +123,7 @@ export const defaultListPageLayout: PageLayout = {
       }
     }),
   ],
-  right: [],
+  right: [
+    Component.DesktopOnly(Component.TableOfContents()),
+  ],
 }
