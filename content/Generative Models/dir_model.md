@@ -5,13 +5,14 @@ title: Models
 ### Variational Autoencoder Family
 #### Variational AutoEncoder (VAE)
 - *title*: (2014) **Auto-Encoding Variational Bayes**
+- *note*: [[VAE]]
 
+Auto-Encoding Variational Bayes learns latent-variable generative models by maximizing the ELBO using a neural encoder–decoder architecture and the reparameterization trick for low-variance gradient estimation. This enables scalable approximate inference for continuous latent variables with stochastic optimization, but is limited by the need for reparameterizable posteriors and simple prior assumptions.
 #### Conditional Variational AutoEncoder (CVAE)
 - *title*: (2015) **Learning Structured Output Representation using Deep Conditional Generative Models**
+- *note*: [[CVAE]]
 
-#### WAE
-- *title*: (2017) **Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks**
-
+Deep Conditional Generative Models (CVAE) introduce Gaussian latent variables to capture multi-modal structured outputs, overcoming deterministic supervised learning’s mode-averaging. While CVAE learns diverse outputs using yyy during training, GSNN and hybrid objectives fix the training–testing mismatch, and multi-scale prediction with input noise improves pixel-level tasks, inspiring reparameterization for other structured predictions.
 ### Discrete Latent Autoencoders
 #### VQ-VAE
 - *title*: (2017) **VQ-VAE: Neural Discrete Representation Learning**

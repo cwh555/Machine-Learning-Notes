@@ -76,41 +76,28 @@ h4 { color: #98c379; }
 h5 { color: #56b6c2; }
 h6 { color: #c678dd; }
 
-/* 針對 > [!pink] 的樣式設定 */
+
+/* 定義 > [!pink] 的樣式 */
 .callout[data-callout="pink"] {
-  background-color: transparent !important; /* 去背 */
-  border: none !important;       /* 去框 */
-  box-shadow: none !important;   /* 去陰影 */
-  padding: 0 !important;         /* 去除整體的內距 */
-  margin: 1rem 0;                /* 保持一點上下的外距，避免貼太近 */
+    background-color: transparent !important; /* 去除背景 */
+    border: none !important;       /* 去除邊框 */
+    box-shadow: none !important;   /* 去除陰影 */
+    margin: 0 !important;          /* 去除外距 */
+    padding: 0 !important;         /* 去除內距 */
+}
 
-  /* 隱藏標題列 (icon 和標題文字) */
-  .callout-title {
+/* 隱藏 Callout 的標題列 (那個 icon 和標題) */
+.callout[data-callout="pink"] .callout-title {
     display: none !important;
-  }
+}
 
-  /* 設定內容樣式 */
-  .callout-content {
-    color: #ff69b4 !important; /* 設定文字顏色 */
-    padding: 0 !important;     /* 去除內容區塊的內距 */
-    border: none !important;   /* 確保沒有左側的顏色條 */
-
-    /* 修正內部的段落間距 */
-    p {
-      margin-top: 0;
-      color: inherit; /* 繼承上面的粉紅色 */
-    }
-
-    /* 重要：強制讓 KaTeX (數學公式) 也變色 */
-    .katex, .katex-display {
-      color: #ff69b4 !important;
-    }
-    
-    /* 針對行內公式的微調 */
-    .katex-html {
-        color: #ff69b4 !important;
-    }
-  }
+/* 設定內容文字顏色，並強制套用到內部的 LaTeX 公式 */
+.callout[data-callout="pink"] .callout-content,
+.callout[data-callout="pink"] .callout-content p,
+.callout[data-callout="pink"] .callout-content .MathJax,
+.callout[data-callout="pink"] .callout-content .jax-element {
+    color: #f98cd1 !important; /* 粉紅色，可自行改色碼 */
+    line-height: 1.5; /* 保持行高閱讀舒適 */
 }
 
 .callout[data-callout="lime"] {

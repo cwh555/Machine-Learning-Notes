@@ -3,7 +3,7 @@ title: Deep Convolutional Generative Adversarial Networks
 properties:
   - hide
 tags:
-  - model-selection
+  - experiments
 ---
 ## Information
 - *title*: Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
