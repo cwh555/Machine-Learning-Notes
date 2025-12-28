@@ -6,7 +6,8 @@ Here, we classify the paper notes according to the tasks they focus on.
 ## Computer Vision
 ### Image Generation
 #### Pure Generation
-- [[dir_model|Generative Models]]: VAE, GAN, Diffusion Models...
+- VAE: [[VAE]]
+- GAN: [[GAN]], [[DCGAN]], [[WGAN]]
 
 #### Image-to-Image Translation
 The goal is to learn the mapping between an input image and an output image using a training set of aligned image pairs.
@@ -27,3 +28,8 @@ In structured prediction, models are $p(y|\,x)$
 while the pure generating models such as VAE, GAN are $x \sim p_\theta​(x)$
 
 - [[CVAE]]
+
+## Representation Learning
+Representation Learning is the task of automatically learning informative and compact features from raw data, such that these learned representations can be effectively used for downstream tasks like classification, generation, or retrieval. The goal is to transform high-dimensional, complex, or noisy input into a structured, low-dimensional latent space that captures essential information.
+
+- [[VQ-VAE]], [[VQ-VAE-2]]

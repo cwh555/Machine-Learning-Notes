@@ -16,9 +16,16 @@ Deep Conditional Generative Models (CVAE) introduce Gaussian latent variables to
 ### Discrete Latent Autoencoders
 #### VQ-VAE
 - *title*: (2017) **VQ-VAE: Neural Discrete Representation Learning**
+- *note*: [[VQ-VAE]]
 
+VQ-VAE maps inputs to a discrete latent space via vector quantization and learns a decoder to reconstruct the data, enabling effective unsupervised representation learning while avoiding posterior collapse. The learned latents can also be paired with autoregressive priors for generative tasks such as image, audio, or video synthesis.
 #### VQ-VAE-2
 - *title*: (2019) **VQ-VAE-2: Generating Diverse High-Fidelity Images**
+- *note*: [[VQ-VAE-2]]
+
+VQ-VAE-2 extends VQ-VAE by using a hierarchical multi-scale latent space and powerful autoregressive priors to model both global structure and local details, enabling high-fidelity and diverse image generation. Classifier-based rejection sampling can be applied to trade off diversity and quality, while the model remains fully likelihood-trained and avoids GAN-like mode collapse.
+
+#### Epsilon-VAE
 
 
 ## GAN Series
