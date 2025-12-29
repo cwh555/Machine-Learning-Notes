@@ -4,7 +4,7 @@ title: Empirical Results
 This page collects 
 - investigations from various studies on the optimal model architecture choices for different scenarios.
 - empirical technique such as preprocessing, hyperparameter...etc.
-
+- design of loss function.
 ## Model
 ### FrameWorks
 #### CNN
@@ -20,3 +20,6 @@ This page collects
 ## Preprocessing
 ### Noise
 - [[CVAE]]
+
+## Loss Function
+prevent trivial solution: [[NICE]]

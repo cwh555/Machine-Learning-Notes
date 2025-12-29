@@ -25,9 +25,6 @@ VQ-VAE maps inputs to a discrete latent space via vector quantization and learns
 
 VQ-VAE-2 extends VQ-VAE by using a hierarchical multi-scale latent space and powerful autoregressive priors to model both global structure and local details, enabling high-fidelity and diverse image generation. Classifier-based rejection sampling can be applied to trade off diversity and quality, while the model remains fully likelihood-trained and avoids GAN-like mode collapse.
 
-#### Epsilon-VAE
-
-
 ## GAN Series
 ### GAN
 - *title*: (2014) **Generative Adversarial Nets**
@@ -52,17 +49,22 @@ CycleGAN uses generators to learn mappings between two unpaired image domains an
 ## Explicit Density Generative Models
 
 ### Normalizing Flow Models
+Normalizing Flow (NF) models are a class of generative models that transform a simple probability distribution (e.g., Gaussian) into a complex data distribution using a sequence of invertible and differentiable transformations.
+
 #### NICE
 - *title*: (2015) **NICE: Non-linear Independent Components Estimation**
+- *note*: [[NICE]]
 
+NICE learns a highly non-linear bijective transformation that maps data to a latent space with independent dimensions, enabling exact log-likelihood computation and efficient ancestral sampling. Its coupling layer architecture ensures invertibility and tractable Jacobian determinants, allowing complex transformations while maintaining stable training and potential applications like inpainting.
 #### RealNVP
 - *title*: (2017) **Density Estimation Using Real NVP**
+- *note*: [[RealNVP]]
 
+RealNVP extends NICE by introducing non-volume-preserving affine coupling layers, enabling more flexible transformations while maintaining invertibility and tractable Jacobian determinants for exact log-likelihood evaluation, inference, and sampling. Its multi-scale architecture with masked convolutions and batch normalization allows efficient modeling of high-dimensional data, learning a semantically meaningful latent space suitable for structured output and semi-supervised tasks.
 #### Glow
 - *title*: (2018) **Glow: Generative Flow with Invertible 1×1 Convolutions**
 
 ### Diffusion-Based Generative Models
-- *title*: (2023) **Flow Matching for Generative Modeling**
 #### DDPM
 - *title*: (2020) **Denoising Diffusion Probabilistic Models**
 
@@ -72,6 +74,10 @@ CycleGAN uses generators to learn mappings between two unpaired image domains an
 #### Latent Diffusion Model
 - *title*: (2022) **High-Resolution Image Synthesis with Latent Diffusion Models**
 
-### Continuous Deterministic Generative Dynamics
+### Continuous Normalizing Flows
+#### Flow Matching
+- *title*: (2023) **Flow Matching for Generative Modeling**
+
+### Consistency-Based Generative Models
 #### Consistency Models
 - *title*: (2023) **Consistency Models**
