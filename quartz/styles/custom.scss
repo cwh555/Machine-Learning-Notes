@@ -1,6 +1,10 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+.katex {
+  font-size: 1em !important; 
+}
+
 /*formula block*/
 .callout[data-callout="green"] {
     --callout-color: 76, 175, 79;

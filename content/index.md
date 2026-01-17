@@ -4,10 +4,9 @@ title: Home
 ## Welcome
 
 Welcome to my machine learning notes website! During my summer break before my sophomore year, I read several foundational books, including but not limited to :
-
-<li><em>Learning from Data</em></li>
-  <li><em>Deep Learning</em></li>
-  <li><em>Neural Networks: A Comprehensive Foundation</em></li>
+- Learning from Data
+- Deep Learning
+- Neural Networks: A Comprehensive Foundation
 
 I took extensive notes using Obsidian, and I had an impulse to make them open on the Internet. Here, you can explore my organized notes and insights from these readings.
 

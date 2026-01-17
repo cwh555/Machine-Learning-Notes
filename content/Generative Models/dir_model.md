@@ -77,7 +77,9 @@ RealNVP extends NICE by introducing non-volume-preserving affine coupling layers
 ### Continuous Normalizing Flows
 #### Flow Matching
 - *title*: (2023) **Flow Matching for Generative Modeling**
+- *note*: [[Flow Matching]]
 
+Flow Matching trains a neural network to directly learn vector fields that transport noise distributions to data distributions along continuous probability paths, enabling efficient, simulation-free generative modeling beyond standard diffusion processes. By using conditional paths per data point, it can construct exact marginal flows from simple per-sample flows, and allows flexible choices such as Optimal Transport paths for minimal, straight-line particle transport.
 ### Consistency-Based Generative Models
 #### Consistency Models
 - *title*: (2023) **Consistency Models**
