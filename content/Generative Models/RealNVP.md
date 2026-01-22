@@ -2,6 +2,7 @@
 title: Density Estimation Using Real NVP
 properties:
   - hide
+image: 0012.jpeg
 ---
 ## Information
 - _title_: Density Estimation Using Real NVP  

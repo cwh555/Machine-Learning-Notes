@@ -2,6 +2,7 @@
 title: VQ-VAE
 properties:
   - hide
+image: 0014.jpeg
 ---
 ## Information
 - _title_: VQ-VAE: Neural Discrete Representation Learning  

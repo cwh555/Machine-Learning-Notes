@@ -2,6 +2,7 @@
 title: Error estimation in the neural network solution of ordinary differential equations
 properties:
   - hide
+image: 0017.jpeg
 ---
 ## Information
 - *title*: Error estimation in the neural network solution of ordinary differential equations

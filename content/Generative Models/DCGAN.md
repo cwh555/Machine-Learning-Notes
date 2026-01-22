@@ -4,6 +4,7 @@ properties:
   - hide
 tags:
   - experiments
+image: 0007.jpeg
 ---
 ## Information
 - *title*: Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks

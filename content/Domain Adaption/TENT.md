@@ -4,6 +4,7 @@ properties:
   - hide
 tags:
   - idea
+image: 0003.jpeg
 ---
 ## Information
 - *title*: TENT: Fully Test-Time Adaption By Entropy Minimization

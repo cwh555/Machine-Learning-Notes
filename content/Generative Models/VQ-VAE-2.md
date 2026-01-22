@@ -2,6 +2,7 @@
 title: "VQ-VAE-2: Generating Diverse High-Fidelity Images"
 properties:
   - hide
+image: 0015.jpeg
 ---
 ## Information
 - _title_: VQ-VAE-2: Generating Diverse High-Fidelity Images  

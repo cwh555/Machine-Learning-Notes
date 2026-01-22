@@ -2,6 +2,7 @@
 title: Parzen window-based log-likelihood estimation
 properties:
   - hide
+image: 0011.jpeg
 ---
 ## Overview
 - the early method to estimate the performance of implicit generative models.

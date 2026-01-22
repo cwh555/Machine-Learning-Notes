@@ -5,6 +5,7 @@ properties:
 tags:
   - idea
   - experiments
+image: 0004.jpeg
 ---
 ## Information
 - *title*: Test-Time Training with Self-Supervision for Generalization under Distribution Shifts

@@ -4,6 +4,7 @@ properties:
   - hide
 tags:
   - experiments
+image: 0005.jpeg
 ---
 ## Information
 - _title_: Learning Structured Output Representation using Deep Conditional Generative Models  

@@ -2,6 +2,7 @@
 title: Cycle-Consistent Adversarial Networks
 properties:
   - hide
+image: 0006.jpeg
 ---
 ## Information
 - *title*: Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks
