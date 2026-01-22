@@ -2,6 +2,7 @@
 title: Neural Ordinary Differential Equations
 properties:
   - hide
+image: 0002.jpeg
 ---
 ## Information
 - *title*: Neural Ordinary Differential Equations
