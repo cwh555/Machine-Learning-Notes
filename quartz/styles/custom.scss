@@ -124,3 +124,47 @@ h6 { color: #c678dd; }
     line-height: 1.5;
 }
 
+/* quartz/styles/custom.scss */
+
+/* 原本的 sidebar 設定保留 */
+.sidebar.right {
+  max-height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.page-image {
+  /* 1. 保持切換邏輯 */
+  display: none; 
+  
+  /* 2. 【重要】移除容器的最大高度限制和 overflow */
+  /* max-height: 30vh;  <-- 刪除這行 */
+  /* overflow: hidden; <-- 刪除這行 */
+  
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  
+  /* 讓外框跟著圖片長高 */
+  height: auto;
+}
+
+.page-image img {
+  /* 3. 【關鍵修改】讓圖片寬度填滿，高度自動保持比例，不裁切 */
+  width: 100%;     /* 寬度填滿容器 */
+  height: auto;    /* 高度自動計算，維持比例 */
+  display: block;  /* 避免圖片下方出現莫名的小空隙 */
+  
+  /* object-fit: cover; <-- 刪除這行，這就是導致裁切的原因 */
+}
+
+/* --- 當 body 有 show-images class 時的行為 (保持不變) --- */
+body.show-images .page-image {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
