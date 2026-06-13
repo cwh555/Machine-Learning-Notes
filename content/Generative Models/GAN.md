@@ -2,7 +2,7 @@
 title: Generative Adversarial Nets
 properties:
   - hide
-image: 0009.jpeg
+  - image
 ---
 
 ## Information

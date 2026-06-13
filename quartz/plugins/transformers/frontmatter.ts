@@ -138,8 +138,8 @@ declare module "vfile" {
       title: string
     } & Partial<{
         tags: string[]
-        label: string | string[]
-        labels: string[]
+        property: string | string[]
+        properties: string[]
         image: string
         aliases: string[]
         modified: string

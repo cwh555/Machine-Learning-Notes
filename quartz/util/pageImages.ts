@@ -5,7 +5,7 @@ import type { BuildCtx } from "./ctx"
 import type { ProcessedContent } from "../plugins/vfile"
 
 const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"])
-const imageLabel = "image"
+const imageProperty = "image"
 
 function normalizeImageName(imageName: unknown): string | undefined {
   if (typeof imageName !== "string") return undefined
@@ -27,15 +27,14 @@ function coerceToStringArray(input: unknown): string[] {
     .filter((value) => value.length > 0)
 }
 
-function hasImageLabel(frontmatter: Record<string, unknown>): boolean {
-  // Support both a single label and a list of labels so authors can choose the lighter syntax.
-  const labels = [
-    ...coerceToStringArray(frontmatter.label),
-    ...coerceToStringArray(frontmatter.labels),
-    ...coerceToStringArray(frontmatter.tags),
+function hasImageProperty(frontmatter: Record<string, unknown>): boolean {
+  // Use Obsidian-style properties to mark pages that should receive an auto-assigned image.
+  const properties = [
+    ...coerceToStringArray(frontmatter.property),
+    ...coerceToStringArray(frontmatter.properties),
   ]
 
-  return labels.some((label) => label.toLowerCase() === imageLabel)
+  return properties.some((property) => property.toLowerCase() === imageProperty)
 }
 
 async function listAvailableImages(): Promise<string[]> {
@@ -83,7 +82,7 @@ export async function assignPageImages(_ctx: BuildCtx, content: ProcessedContent
       continue
     }
 
-    if (hasImageLabel(frontmatter)) {
+    if (hasImageProperty(frontmatter)) {
       pagesNeedingImages.push(processedContent)
     }
   }

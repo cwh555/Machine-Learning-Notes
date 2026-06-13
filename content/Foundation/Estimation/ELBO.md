@@ -1,5 +1,6 @@
 ---
 title: Evidence Lower Bound
+properties:
 ---
 ## Setup
 Consider a probabilistic model with observed data $x$ and latent variables $z$, parameterized by $\theta$:

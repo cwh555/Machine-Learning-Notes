@@ -2,7 +2,7 @@
 title: "LFT: Neural Ordinary Differential Equations With Learnable Final-Time"
 properties:
   - hide
-image: 0001.jpeg
+  - image
 ---
 ## Information
 - *title*: LFT: Neural Ordinary Differential Equations With Learnable Final-Time

@@ -2,7 +2,7 @@
 title: Variational Autoencoder
 properties:
   - hide
-image: 0013.jpeg
+  - image
 ---
 ## Information
 - *Title*: Auto-Encoding Variational Bayes  

@@ -2,7 +2,7 @@
 title: Wasserstein Generative Adversarial Networks
 properties:
   - hide
-image: 0016.jpeg
+  - image
 ---
 ## Information
 - *title*: Wasserstein Generative Adversarial Networks

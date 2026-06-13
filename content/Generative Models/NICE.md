@@ -2,9 +2,9 @@
 title: "NICE: Non-linear Independent Components Estimation"
 properties:
   - hide
+  - image
 tags:
   - experiments
-image: 0010.jpeg
 ---
 ## Information
 - _title_: NICE: Non-linear Independent Components Estimation  

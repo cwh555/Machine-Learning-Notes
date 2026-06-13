@@ -2,7 +2,7 @@
 title: Flow Matching
 properties:
   - hide
-image: 0008.jpeg
+  - image
 ---
 
 ## Information

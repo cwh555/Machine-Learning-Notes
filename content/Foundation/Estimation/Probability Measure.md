@@ -1,5 +1,6 @@
 ---
 title: Probability Measure
+properties:
 ---
 Probability measures are primarily used to quantify and compare the model distribution and the real distribution in generative models.
 
