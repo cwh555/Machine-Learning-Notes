@@ -4,10 +4,21 @@ import styles from "./styles/darkmode.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { i18n } from "../i18n"
 import { classNames } from "../util/lang"
+import { joinSegments, pathToRoot } from "../util/path"
+import { existsSync } from "node:fs"
+import path from "node:path"
 
-const Darkmode: QuartzComponent = ({ displayClass, cfg }: QuartzComponentProps) => {
+const Darkmode: QuartzComponent = ({ fileData, displayClass, cfg }: QuartzComponentProps) => {
+  const deniedImageFile = ["png", "jpg", "jpeg"]
+    .map((extension) => `light-denied.${extension}`)
+    .find((fileName) => existsSync(path.join("quartz", "static", "action", fileName)))
+
+  const deniedImagePath = deniedImageFile
+    ? joinSegments(pathToRoot(fileData.slug!), "static/action", deniedImageFile)
+    : ""
+
   return (
-    <button class={classNames(displayClass, "darkmode")}>
+    <button class={classNames(displayClass, "darkmode")} data-protect-denied-src={deniedImagePath}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

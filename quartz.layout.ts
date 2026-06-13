@@ -55,7 +55,7 @@ export const defaultContentPageLayout: PageLayout = {
         },
         { Component: Component.Darkmode() },
         { Component: Component.ReaderMode() },
-        { Component: Component.ImageToggle()},
+        { Component: Component.ProtectedGate() },
       ],
     }),
     Component.Explorer({

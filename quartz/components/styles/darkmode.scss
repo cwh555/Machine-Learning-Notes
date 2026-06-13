@@ -45,3 +45,30 @@
     display: none;
   }
 }
+
+.protect-light-denied-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  animation: protect-light-denied-flash 2s ease-out forwards;
+}
+
+@keyframes protect-light-denied-flash {
+  0% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.15;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

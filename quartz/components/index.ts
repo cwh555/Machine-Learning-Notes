@@ -25,6 +25,7 @@ import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import PageImage from "./PageImage"
 import ImageToggle from "./ImageToggle"
+import ProtectedGate from "./ProtectedGate"
 
 export {
   ArticleTitle,
@@ -53,5 +54,6 @@ export {
   Flex,
   ConditionalRender,
   PageImage,
-  ImageToggle
+  ImageToggle,
+  ProtectedGate
 }
