@@ -88,6 +88,11 @@ function createFileNode(currentSlug: FullSlug, node: FileTrieNode): HTMLLIElemen
   a.dataset.for = node.slug
   a.textContent = node.displayName
 
+  // Private-mode entries stay in the Explorer tree, but are only visible after unlock.
+  if (node.data?.properties?.includes("private-mode")) {
+    li.classList.add("private-mode-only")
+  }
+
   if (currentSlug === node.slug) {
     a.classList.add("active")
   }

@@ -268,3 +268,11 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     overscroll-behavior: none;
   }
 }
+
+.explorer .private-mode-only {
+  display: none;
+}
+
+body.private-mode .explorer .private-mode-only {
+  display: list-item;
+}

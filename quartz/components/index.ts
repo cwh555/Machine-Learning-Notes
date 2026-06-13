@@ -55,5 +55,5 @@ export {
   ConditionalRender,
   PageImage,
   ImageToggle,
-  ProtectedGate
+  ProtectedGate,
 }
