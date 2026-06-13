@@ -138,6 +138,9 @@ declare module "vfile" {
       title: string
     } & Partial<{
         tags: string[]
+        label: string | string[]
+        labels: string[]
+        image: string
         aliases: string[]
         modified: string
         created: string
