@@ -6,6 +6,7 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
+    Component.PrivateBackground(),
     // This graph only renders on the homepage (index)
     Component.ConditionalRender({
       component: Component.Graph({
@@ -43,6 +44,10 @@ export const defaultContentPageLayout: PageLayout = {
     Component.ArticleTitle(),
     Component.ContentMeta(),
     Component.TagList(),
+    Component.ConditionalRender({
+      component: Component.PrivateBackgroundSettings(),
+      condition: (page) => page.fileData.slug === "action-settings",
+    }),
   ],
   left: [
     Component.PageTitle(),

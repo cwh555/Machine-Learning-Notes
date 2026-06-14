@@ -24,6 +24,8 @@ import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import PageImage from "./PageImage"
+import PrivateBackground from "./PrivateBackground"
+import PrivateBackgroundSettings from "./PrivateBackgroundSettings"
 import ImageToggle from "./ImageToggle"
 import ProtectedGate from "./ProtectedGate"
 
@@ -54,6 +56,8 @@ export {
   Flex,
   ConditionalRender,
   PageImage,
+  PrivateBackground,
+  PrivateBackgroundSettings,
   ImageToggle,
   ProtectedGate,
 }
