@@ -39,7 +39,7 @@ const PrivateCharacterSettings: QuartzComponent = ({ fileData }: QuartzComponent
       src: joinSegments(pathToRoot(fileData.slug!), "static/characters", character.id, frame.path),
       kind: "animation",
     }))
-    const preview = [...backgrounds.slice(0, 2), ...images.slice(0, 1), ...frames.slice(0, 1)].slice(0, 4)
+    const preview = [...backgrounds, ...images].slice(0, 4)
 
     return {
       id: character.id,
@@ -189,22 +189,23 @@ PrivateCharacterSettings.afterDOMLoaded = `
     const preview = document.createElement("span")
     preview.className = "private-character-preview"
 
-    const images = Array.isArray(character.preview) ? character.preview : []
-    if (images.length === 0) {
+    const items = Array.isArray(character.preview) ? character.preview : []
+    preview.dataset.count = String(Math.min(items.length, 4))
+
+    if (items.length === 0) {
       preview.classList.add("empty")
       preview.textContent = character.name.slice(0, 1).toUpperCase()
       card.appendChild(preview)
       return
     }
 
-    for (const item of images) {
+    for (const item of items.slice(0, 4)) {
       const image = document.createElement("img")
       image.src = item.src
       image.alt = ""
       image.loading = "lazy"
       image.setAttribute("aria-hidden", "true")
-      image.className =
-        item.kind === "animation" ? "is-animation" : item.kind === "image" ? "is-image" : "is-background"
+      image.className = "private-character-preview-image"
       preview.appendChild(image)
     }
 

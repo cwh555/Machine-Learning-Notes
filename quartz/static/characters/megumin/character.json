@@ -1,0 +1,15 @@
+{
+  "id": "megumin",
+  "name": "Megumin",
+  "defaults": {
+    "backgroundEnabled": true,
+    "backgroundOpacity": 15,
+    "slideshowEnabled": true,
+    "slideshowSeconds": 8,
+    "animationEnabled": true,
+    "animationSize": 100,
+    "animationOpacity": 100,
+    "animationFps": 8,
+    "animationMinGuard": 1200
+  }
+}

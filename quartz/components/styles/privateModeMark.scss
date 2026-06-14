@@ -1,38 +1,93 @@
-#private-mode-mark {
+#private-mode-mark-root {
   position: fixed;
   top: max(0.75rem, env(safe-area-inset-top));
   right: max(0.75rem, env(safe-area-inset-right));
   z-index: 10001;
+  display: grid;
+  justify-items: end;
+  gap: 0.45rem;
+}
+
+#private-mode-mark-root[hidden] {
+  display: none !important;
+}
+
+#private-mode-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 42px;
   height: 42px;
+  padding: 2px;
+  overflow: hidden;
   border-radius: 999px;
   background: color-mix(in srgb, var(--light) 84%, transparent);
   border: 1px solid color-mix(in srgb, var(--secondary) 35%, var(--lightgray));
   box-shadow: 0 6px 18px color-mix(in srgb, var(--darkgray) 16%, transparent);
   backdrop-filter: blur(8px);
+  cursor: pointer;
   user-select: none;
 }
 
-#private-mode-mark[hidden] {
-  display: none !important;
-}
-
-#private-mode-mark:hover {
+#private-mode-mark:hover,
+#private-mode-mark[aria-expanded="true"] {
   border-color: var(--secondary);
 }
 
 #private-mode-mark-image {
   display: block;
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: 999px;
+  max-width: none;
+  max-height: none;
+}
+
+#private-mode-character-menu {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--secondary) 25%, var(--lightgray));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--light) 88%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--darkgray) 18%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+#private-mode-character-menu[hidden] {
+  display: none !important;
+}
+
+.private-mode-character-menu-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.private-mode-character-menu-item:hover,
+.private-mode-character-menu-item.active {
+  border-color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 10%, transparent);
+}
+
+.private-mode-character-menu-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
   max-width: none;
   max-height: none;
 }
