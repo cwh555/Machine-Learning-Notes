@@ -4,11 +4,24 @@ import type { ProcessedContent } from "../plugins/vfile"
 
 const imageProperty = "image"
 
-function normalizeImageName(imageName: unknown): string | undefined {
-  if (typeof imageName !== "string") return undefined
+function normalizeImageSlot(imageName: unknown): string | undefined {
+  if (typeof imageName !== "string" && typeof imageName !== "number") return undefined
 
-  const normalized = imageName.trim().replace(/^\/+/, "").replace(/^images\/+/, "")
-  return normalized.length > 0 ? normalized : undefined
+  const normalized = imageName
+    .toString()
+    .trim()
+    .replace(/^\/+/, "")
+    .replace(/^images\/+/, "")
+
+  if (normalized.length === 0) return undefined
+
+  const basename = normalized.replace(/\.[^.\/]+$/, "")
+
+  if (/^\d+$/.test(basename)) {
+    return String(Number.parseInt(basename, 10))
+  }
+
+  return basename
 }
 
 function coerceToStringArray(input: unknown): string[] {
@@ -25,7 +38,6 @@ function coerceToStringArray(input: unknown): string[] {
 }
 
 function hasImageProperty(frontmatter: Record<string, unknown>): boolean {
-  // Use Obsidian-style properties to mark pages that should receive an auto-assigned image.
   const properties = [
     ...coerceToStringArray(frontmatter.property),
     ...coerceToStringArray(frontmatter.properties),
@@ -34,23 +46,29 @@ function hasImageProperty(frontmatter: Record<string, unknown>): boolean {
   return properties.some((property) => property.toLowerCase() === imageProperty)
 }
 
-async function listAvailableImages(): Promise<string[]> {
-  const imageNames = new Set<string>()
+function listAvailableImageSlots(): string[] {
+  const imageCounts = getPrivateCharacters()
+    .map((character) => character.images.length)
+    .filter((count) => count > 0)
 
-  for (const character of getPrivateCharacters()) {
-    for (const image of character.images) {
-      imageNames.add(image.name)
-    }
+  if (imageCounts.length === 0) {
+    console.warn("[page-images] no character images found under quartz/static/characters/<id>/images")
+    return []
   }
 
-  return [...imageNames].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+  // 取所有角色中最多的圖片數。
+  // 每篇 properties: image 的 note 都應該拿到 slot；
+  // 如果某個角色圖片較少，交給 PageImage 依該角色圖片數循環 fallback。
+  const availableCount = Math.max(...imageCounts)
+
+  return Array.from({ length: availableCount }, (_, index) => String(index + 1))
 }
 
 export async function assignPageImages(_ctx: BuildCtx, content: ProcessedContent[]): Promise<void> {
-  const availableImages = await listAvailableImages()
-  if (availableImages.length === 0) return
+  const availableSlots = listAvailableImageSlots()
+  if (availableSlots.length === 0) return
 
-  const usedImages = new Set<string>()
+  const usedSlots = new Set<string>()
   const pagesNeedingImages: ProcessedContent[] = []
 
   const sortedContent = [...content].sort((a, b) => {
@@ -66,11 +84,10 @@ export async function assignPageImages(_ctx: BuildCtx, content: ProcessedContent
     const frontmatter = file.data.frontmatter as Record<string, unknown> | undefined
     if (!frontmatter) continue
 
-    const manualImage = normalizeImageName(frontmatter.image)
-    if (manualImage) {
-      // Manual images always win; reserve them so auto assignment does not reuse the same file.
-      usedImages.add(manualImage)
-      frontmatter.image = manualImage
+    const existingImageSlot = normalizeImageSlot(frontmatter.image)
+    if (existingImageSlot) {
+      usedSlots.add(existingImageSlot)
+      frontmatter.image = existingImageSlot
       continue
     }
 
@@ -79,28 +96,29 @@ export async function assignPageImages(_ctx: BuildCtx, content: ProcessedContent
     }
   }
 
-  let imageIndex = 0
+  let slotIndex = 0
+
   for (const processedContent of pagesNeedingImages) {
     const file = processedContent[1]
     const frontmatter = file.data.frontmatter as Record<string, unknown> | undefined
     if (!frontmatter) continue
 
-    while (imageIndex < availableImages.length && usedImages.has(availableImages[imageIndex])) {
-      imageIndex++
+    while (slotIndex < availableSlots.length && usedSlots.has(availableSlots[slotIndex])) {
+      slotIndex++
     }
 
-    const imageName = availableImages[imageIndex]
-    if (!imageName) {
+    const imageSlot = availableSlots[slotIndex]
+    if (!imageSlot) {
       console.warn(
-        `[page-images] no unused image left for ${
+        `[page-images] no unused image slot left for ${
           file.data.relativePath ?? file.data.slug ?? "unknown file"
         }`,
       )
       continue
     }
 
-    frontmatter.image = imageName
-    usedImages.add(imageName)
-    imageIndex++
+    frontmatter.image = imageSlot
+    usedSlots.add(imageSlot)
+    slotIndex++
   }
 }

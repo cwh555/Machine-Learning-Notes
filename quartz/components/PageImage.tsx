@@ -5,34 +5,53 @@ import { getPrivateCharacters } from "../util/privateCharacters"
 const characterStorageKey = "private-character"
 const characterChangeEventName = "private-character-change"
 
-function normalizeImageName(imageName: unknown): string | undefined {
-  if (typeof imageName !== "string") return undefined
+function normalizeImageSlot(imageName: unknown): string | undefined {
+  if (typeof imageName !== "string" && typeof imageName !== "number") return undefined
 
-  const normalized = imageName.trim().replace(/^\/+/, "").replace(/^images\/+/, "")
-  return normalized.length > 0 ? normalized : undefined
+  const normalized = imageName
+    .toString()
+    .trim()
+    .replace(/^\/+/, "")
+    .replace(/^images\/+/, "")
+
+  if (normalized.length === 0) return undefined
+
+  const basename = normalized.replace(/\.[^.\/]+$/, "")
+
+  if (/^\d+$/.test(basename)) {
+    return String(Number.parseInt(basename, 10))
+  }
+
+  return basename
 }
 
 const PageImage: QuartzComponent = ({ fileData, displayClass }: QuartzComponentProps) => {
-  const imageName = normalizeImageName(fileData.frontmatter?.image)
-  if (!imageName) return null
+  const imageSlot = normalizeImageSlot(fileData.frontmatter?.image)
+  if (!imageSlot) return null
+
+  const root = pathToRoot(fileData.slug!)
 
   const characters = getPrivateCharacters().map((character) => ({
     id: character.id,
     name: character.name,
-    images: character.images.map((image) => ({
+    images: character.images.map((image, index) => ({
+      slot: String(index + 1),
       name: image.name,
       path: image.path,
-      src: joinSegments(pathToRoot(fileData.slug!), "static/characters", character.id, image.path),
+      src: joinSegments(root, "static/characters", character.id, image.path),
     })),
   }))
 
-  const fallbackImage = characters.flatMap((character) => character.images).find((image) => image.name === imageName)
+  const fallbackImage = characters
+    .flatMap((character) => character.images)
+    .find((image) => image.slot === imageSlot)
+
   if (!fallbackImage) return null
 
   return (
     <div
       className={`page-image ${displayClass ?? ""}`}
-      data-image-name={imageName}
+      data-image-slot={imageSlot}
       data-characters={JSON.stringify(characters)}
     >
       <img
@@ -41,7 +60,7 @@ const PageImage: QuartzComponent = ({ fileData, displayClass }: QuartzComponentP
         style={{
           width: "100%",
           borderRadius: "8px",
-          marginBottom: "1rem",
+          margin: "0 0 1rem",
           height: "auto",
           display: "block",
         }}
@@ -76,48 +95,82 @@ PageImage.afterDOMLoaded = `
     }
   }
 
-  const findImage = (character, imageName) => {
-    if (!character || !Array.isArray(character.images)) return null
-    return character.images.find((image) => image.name === imageName) ?? null
+  const findImageBySlot = (character, slot) => {
+    if (!character || !Array.isArray(character.images) || character.images.length === 0) return null
+
+    const exactImage = character.images.find((image) => image.slot === slot)
+    if (exactImage) return exactImage
+
+    if (/^\d+$/.test(slot)) {
+      const slotNumber = Number.parseInt(slot, 10)
+      if (Number.isFinite(slotNumber) && slotNumber > 0) {
+        return character.images[(slotNumber - 1) % character.images.length] ?? null
+      }
+    }
+
+    return null
+  }
+
+  const pickImageSrc = (characters, slot) => {
+    const selectedCharacterId = safeGetStorage(CHARACTER_STORAGE_KEY)
+
+    const selectedCharacter = selectedCharacterId
+      ? characters.find((character) => character.id === selectedCharacterId)
+      : null
+
+    const selectedImage = findImageBySlot(selectedCharacter, slot)
+    if (selectedImage?.src) return selectedImage.src
+
+    for (const character of characters) {
+      const fallbackImage = findImageBySlot(character, slot)
+      if (fallbackImage?.src) return fallbackImage.src
+    }
+
+    return null
   }
 
   const updatePageImage = (root) => {
     if (!(root instanceof HTMLElement)) return
 
-    const imageName = root.dataset.imageName
     const image = root.querySelector("img")
-    if (!(image instanceof HTMLImageElement) || !imageName) return
+    if (!(image instanceof HTMLImageElement)) return
+
+    const slot = root.dataset.imageSlot
+    if (!slot) return
 
     const characters = parseCharacters(root)
-    const selectedCharacterId = safeGetStorage(CHARACTER_STORAGE_KEY)
-    const selectedCharacter = selectedCharacterId
-      ? characters.find((character) => character.id === selectedCharacterId)
-      : null
-    const selectedImage = findImage(selectedCharacter, imageName)
-    const fallbackImage = characters.map((character) => findImage(character, imageName)).find(Boolean)
-    const nextImage = selectedImage ?? fallbackImage ?? null
+    const nextSrc = pickImageSrc(characters, slot)
 
-    if (!nextImage?.src) {
+    if (!nextSrc) {
       root.hidden = true
       image.removeAttribute("src")
       return
     }
 
     root.hidden = false
-    if (image.src !== new URL(nextImage.src, window.location.href).href) {
-      image.src = nextImage.src
+
+    const resolvedNextSrc = new URL(nextSrc, window.location.href).href
+    if (image.src !== resolvedNextSrc) {
+      image.src = nextSrc
     }
   }
 
   const updateAllPageImages = () => {
-    document.querySelectorAll(".page-image[data-image-name]").forEach(updatePageImage)
+    document.querySelectorAll(".page-image[data-image-slot]").forEach(updatePageImage)
   }
 
   const bindListenersOnce = () => {
     if (state.bound) return
     state.bound = true
+
     document.addEventListener("nav", updateAllPageImages)
     document.addEventListener(CHARACTER_CHANGE_EVENT_NAME, updateAllPageImages)
+
+    window.addEventListener("storage", (event) => {
+      if (event.key === CHARACTER_STORAGE_KEY) {
+        updateAllPageImages()
+      }
+    })
   }
 
   bindListenersOnce()
