@@ -1,16 +1,13 @@
-import path from "path"
-import { readdir } from "fs/promises"
-import { QUARTZ, joinSegments } from "./path"
+import { getPrivateCharacters } from "./privateCharacters"
 import type { BuildCtx } from "./ctx"
 import type { ProcessedContent } from "../plugins/vfile"
 
-const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"])
 const imageProperty = "image"
 
 function normalizeImageName(imageName: unknown): string | undefined {
   if (typeof imageName !== "string") return undefined
 
-  const normalized = imageName.trim().replace(/^\/+/, "")
+  const normalized = imageName.trim().replace(/^\/+/, "").replace(/^images\/+/, "")
   return normalized.length > 0 ? normalized : undefined
 }
 
@@ -38,20 +35,15 @@ function hasImageProperty(frontmatter: Record<string, unknown>): boolean {
 }
 
 async function listAvailableImages(): Promise<string[]> {
-  const imageDir = joinSegments(QUARTZ, "static", "images")
+  const imageNames = new Set<string>()
 
-  let entries: string[]
-  try {
-    entries = await readdir(imageDir)
-  } catch (error) {
-    console.warn(`[page-images] unable to read ${imageDir}: ${(error as Error).message}`)
-    return []
+  for (const character of getPrivateCharacters()) {
+    for (const image of character.images) {
+      imageNames.add(image.name)
+    }
   }
 
-  return entries
-    .filter((entry) => !entry.startsWith(".") && !entry.startsWith("._"))
-    .filter((entry) => imageExtensions.has(path.extname(entry).toLowerCase()))
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+  return [...imageNames].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
 }
 
 export async function assignPageImages(_ctx: BuildCtx, content: ProcessedContent[]): Promise<void> {

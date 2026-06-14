@@ -1,15 +1,17 @@
+import styles from "./styles/privateAnimation.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { pathToRoot, joinSegments } from "../util/path"
-import { getPrivateAnimationCharacters } from "../util/privateAnimations"
+import { getPrivateCharacters } from "../util/privateCharacters"
 
 const privateModeClass = "private-mode"
 const enabledStorageKey = "private-animation-enabled"
-const characterStorageKey = "private-animation-character"
+const characterStorageKey = "private-character"
 const sizeStorageKey = "private-animation-size"
 const opacityStorageKey = "private-animation-opacity"
 const fpsStorageKey = "private-animation-fps"
 const minGuardStorageKey = "private-animation-min-guard"
 const changeEventName = "private-animation-change"
+const characterChangeEventName = "private-character-change"
 const defaultSize = 100
 const defaultOpacity = 100
 const defaultFps = 8
@@ -17,11 +19,13 @@ const defaultMinGuard = 1200
 const baseHeightPx = 64
 
 const PrivateAnimation: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
-  const characters = getPrivateAnimationCharacters().map((character) => ({
+  const characters = getPrivateCharacters().map((character) => ({
+    id: character.id,
     name: character.name,
-    frames: character.frames.map((frame) => ({
+    frames: character.animation.frames.map((frame) => ({
       name: frame.name,
-      src: joinSegments(pathToRoot(fileData.slug!), "static/animation", character.name, frame.name),
+      path: frame.path,
+      src: joinSegments(pathToRoot(fileData.slug!), "static/characters", character.id, frame.path),
     })),
   }))
 
@@ -56,6 +60,7 @@ PrivateAnimation.afterDOMLoaded = `
   const FPS_STORAGE_KEY = ${JSON.stringify(fpsStorageKey)}
   const MIN_GUARD_STORAGE_KEY = ${JSON.stringify(minGuardStorageKey)}
   const CHANGE_EVENT_NAME = ${JSON.stringify(changeEventName)}
+  const CHARACTER_CHANGE_EVENT_NAME = ${JSON.stringify(characterChangeEventName)}
   const DEFAULT_SIZE = ${JSON.stringify(defaultSize)}
   const DEFAULT_OPACITY = ${JSON.stringify(defaultOpacity)}
   const DEFAULT_FPS = ${JSON.stringify(defaultFps)}
@@ -107,7 +112,7 @@ PrivateAnimation.afterDOMLoaded = `
   }
 
   const getEnabled = () => safeGetStorage(ENABLED_STORAGE_KEY) === "true"
-  const getSelectedCharacterName = () => safeGetStorage(CHARACTER_STORAGE_KEY)
+  const getSelectedCharacterId = () => safeGetStorage(CHARACTER_STORAGE_KEY)
   const clampRatio = (ratio) => Math.min(1, Math.max(0, ratio))
   const getSize = () => clampNumber(Number.parseInt(safeGetStorage(SIZE_STORAGE_KEY) ?? "", 10), DEFAULT_SIZE, 10, 500)
   const getOpacity = () => clampNumber(Number.parseInt(safeGetStorage(OPACITY_STORAGE_KEY) ?? "", 10), DEFAULT_OPACITY, 0, 100)
@@ -115,9 +120,9 @@ PrivateAnimation.afterDOMLoaded = `
   const getMinGuard = () => clampNumber(Number.parseInt(safeGetStorage(MIN_GUARD_STORAGE_KEY) ?? "", 10), DEFAULT_MIN_GUARD, 0, 10000)
 
   const getSelectedCharacter = () => {
-    const name = getSelectedCharacterName()
-    if (!name) return null
-    return parseCharacters().find((character) => character.name === name) ?? null
+    const id = getSelectedCharacterId()
+    if (!id) return null
+    return parseCharacters().find((character) => character.id === id) ?? null
   }
 
   const stopFrameTimer = () => {
@@ -311,7 +316,7 @@ PrivateAnimation.afterDOMLoaded = `
     stopFrameTimer()
 
     const fps = getFps()
-    state.currentCharacter = character.name
+    state.currentCharacter = character.id
     state.currentFps = fps
     state.frameIndex = 0
     setFrame(character, state.frameIndex)
@@ -347,7 +352,7 @@ PrivateAnimation.afterDOMLoaded = `
 
     const fps = getFps()
 
-    if (state.currentCharacter !== character.name || state.currentFps !== fps || !state.frameTimer) {
+    if (state.currentCharacter !== character.id || state.currentFps !== fps || !state.frameTimer) {
       startFrameTimer(character)
     } else {
       setFrame(character, state.frameIndex)
@@ -360,6 +365,7 @@ PrivateAnimation.afterDOMLoaded = `
 
     document.addEventListener("nav", applyAnimation)
     document.addEventListener(CHANGE_EVENT_NAME, applyAnimation)
+    document.addEventListener(CHARACTER_CHANGE_EVENT_NAME, applyAnimation)
     window.addEventListener("scroll", schedulePositionUpdate, { passive: true })
     window.addEventListener("resize", schedulePositionUpdate)
 
@@ -406,142 +412,6 @@ PrivateAnimation.afterDOMLoaded = `
 })()
 `
 
-PrivateAnimation.css = `
-#private-animation-layer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9998;
-  height: 0;
-  pointer-events: none;
-  user-select: none;
-  overflow: visible;
-}
-
-#private-animation-layer[hidden] {
-  display: none !important;
-}
-
-#private-animation-sprite {
-  position: fixed !important;
-  left: 0;
-  bottom: 6px !important;
-  display: block !important;
-  box-sizing: border-box;
-  width: auto !important;
-  height: auto;
-  max-width: none !important;
-  max-height: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-  image-rendering: auto;
-  transform: none !important;
-  transform-origin: bottom left;
-}
-
-html.private-animation-active,
-body.private-animation-active {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-html.private-animation-active::-webkit-scrollbar,
-body.private-animation-active::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-#private-animation-progress {
-  position: fixed;
-  left: max(16px, env(safe-area-inset-left));
-  right: max(16px, env(safe-area-inset-right));
-  bottom: 8px;
-  height: 7px;
-  z-index: 10000;
-  box-sizing: border-box;
-  pointer-events: auto;
-  cursor: pointer;
-  touch-action: none;
-  user-select: none;
-  overflow: visible;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--lightgray) 82%, var(--light) 18%);
-  border: 1px solid color-mix(in srgb, var(--darkgray) 18%, transparent);
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--darkgray) 16%, transparent);
-}
-
-#private-animation-progress-fill {
-  position: absolute;
-  inset: 0 auto 0 0;
-  height: 100%;
-  width: 0%;
-  z-index: 1;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(90deg, var(--secondary), var(--tertiary));
-  opacity: 0.9;
-  transition: width 80ms linear;
-}
-
-#private-animation-progress-range {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  width: 100%;
-  height: 28px;
-  z-index: 2;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  cursor: pointer;
-  transform: translateY(-50%);
-  appearance: none;
-  -webkit-appearance: none;
-  background: transparent;
-  touch-action: none;
-}
-
-#private-animation-progress-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
-  border: 0;
-}
-
-#private-animation-progress-range::-webkit-slider-thumb {
-  width: 28px;
-  height: 28px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-#private-animation-progress-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
-  border: 0;
-}
-
-#private-animation-progress-range::-moz-range-thumb {
-  width: 28px;
-  height: 28px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-}
-
-#private-animation-progress.is-dragging #private-animation-progress-fill {
-  transition: none;
-}
-`
+PrivateAnimation.css = styles
 
 export default (() => PrivateAnimation) satisfies QuartzComponentConstructor

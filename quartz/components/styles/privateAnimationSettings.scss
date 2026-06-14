@@ -1,0 +1,115 @@
+.private-animation-settings {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background: var(--light);
+}
+
+body.private-mode .private-animation-settings {
+  display: block;
+}
+
+.private-animation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.private-animation-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 0;
+  background: none;
+  color: var(--darkgray);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.private-animation-switch-track {
+  position: relative;
+  width: 2.4rem;
+  height: 1.2rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 999px;
+  background: var(--lightgray);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.private-animation-switch-knob {
+  position: absolute;
+  top: 50%;
+  left: 0.15rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: var(--light);
+  transform: translateY(-50%);
+  transition: left 0.15s ease;
+}
+
+.private-animation-switch.active .private-animation-switch-track {
+  border-color: var(--secondary);
+  background: var(--secondary);
+}
+
+.private-animation-switch.active .private-animation-switch-knob {
+  left: 1.25rem;
+}
+
+.private-animation-switch-label {
+  min-width: 1.8rem;
+  color: var(--darkgray);
+}
+
+.private-animation-details {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.65rem;
+}
+
+.private-animation-details[hidden] {
+  display: none !important;
+}
+
+.private-animation-character-row {
+  margin-top: 0.1rem;
+}
+
+.private-animation-frame-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  overflow-x: auto;
+}
+
+.private-animation-frame-strip[hidden] {
+  display: none !important;
+}
+
+.private-animation-frame-strip img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.private-animation-control-row {
+  align-items: baseline;
+}
+
+.private-animation-slider {
+  width: min(240px, 100%);
+  accent-color: var(--secondary);
+}
+
+.private-animation-empty {
+  margin: 0;
+  color: var(--gray);
+}

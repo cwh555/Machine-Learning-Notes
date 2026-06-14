@@ -1,7 +1,9 @@
+import styles from "./styles/privateBackground.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { pathToRoot, joinSegments } from "../util/path"
-import { getPrivateBackgroundFiles } from "../util/privateBackgrounds"
+import { getPrivateCharacters } from "../util/privateCharacters"
 
+const characterStorageKey = "private-character"
 const enabledStorageKey = "private-background-enabled"
 const storageKey = "private-background"
 const opacityStorageKey = "private-background-opacity"
@@ -11,17 +13,23 @@ const defaultOpacity = 15
 const defaultSlideshowSeconds = 8
 const privateModeClass = "private-mode"
 const changeEventName = "private-background-change"
+const characterChangeEventName = "private-character-change"
 
 const PrivateBackground: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
-  const backgrounds = getPrivateBackgroundFiles().map((background) => ({
-    name: background.name,
-    src: joinSegments(pathToRoot(fileData.slug!), "static/background", background.name),
+  const characters = getPrivateCharacters().map((character) => ({
+    id: character.id,
+    name: character.name,
+    backgrounds: character.backgrounds.map((background) => ({
+      name: background.name,
+      path: background.path,
+      src: joinSegments(pathToRoot(fileData.slug!), "static/characters", character.id, background.path),
+    })),
   }))
 
   return (
     <div
       id="private-background-layer"
-      data-backgrounds={JSON.stringify(backgrounds)}
+      data-characters={JSON.stringify(characters)}
       aria-hidden="true"
       hidden
     />
@@ -30,6 +38,7 @@ const PrivateBackground: QuartzComponent = ({ fileData }: QuartzComponentProps) 
 
 PrivateBackground.afterDOMLoaded = `
 (() => {
+  const CHARACTER_STORAGE_KEY = ${JSON.stringify(characterStorageKey)}
   const ENABLED_STORAGE_KEY = ${JSON.stringify(enabledStorageKey)}
   const STORAGE_KEY = ${JSON.stringify(storageKey)}
   const OPACITY_STORAGE_KEY = ${JSON.stringify(opacityStorageKey)}
@@ -39,6 +48,7 @@ PrivateBackground.afterDOMLoaded = `
   const DEFAULT_SLIDESHOW_SECONDS = ${JSON.stringify(defaultSlideshowSeconds)}
   const PRIVATE_MODE_CLASS = ${JSON.stringify(privateModeClass)}
   const CHANGE_EVENT_NAME = ${JSON.stringify(changeEventName)}
+  const CHARACTER_CHANGE_EVENT_NAME = ${JSON.stringify(characterChangeEventName)}
 
   const state = window.__quartzPrivateBackground ?? {
     bound: false,
@@ -47,7 +57,7 @@ PrivateBackground.afterDOMLoaded = `
     slideshowMs: null,
     slideshowSignature: null,
     shuffleQueue: [],
-    lastBackgroundName: null,
+    lastBackgroundPath: null,
   }
   window.__quartzPrivateBackground = state
 
@@ -67,18 +77,26 @@ PrivateBackground.afterDOMLoaded = `
     } catch {}
   }
 
-  const parseBackgrounds = () => {
+  const parseCharacters = () => {
     const layer = getLayer()
     if (!layer) return []
 
     try {
-      const raw = layer.dataset.backgrounds ?? "[]"
+      const raw = layer.dataset.characters ?? "[]"
       const parsed = JSON.parse(raw)
       return Array.isArray(parsed) ? parsed : []
     } catch {
       return []
     }
   }
+
+  const getSelectedCharacter = () => {
+    const id = safeGetStorage(CHARACTER_STORAGE_KEY)
+    if (!id) return null
+    return parseCharacters().find((character) => character.id === id) ?? null
+  }
+
+  const getBackgrounds = () => getSelectedCharacter()?.backgrounds ?? []
 
   const clampNumber = (value, fallback, min, max) => {
     if (!Number.isFinite(value)) return fallback
@@ -99,7 +117,7 @@ PrivateBackground.afterDOMLoaded = `
   }
 
   const getBackgroundSignature = (backgrounds) =>
-    JSON.stringify(backgrounds.map((background) => [background.name, background.src]))
+    JSON.stringify(backgrounds.map((background) => [background.path, background.src]))
 
   const stopSlideshowTimer = () => {
     if (state.slideshowTimer) {
@@ -123,8 +141,8 @@ PrivateBackground.afterDOMLoaded = `
     layer.hidden = false
   }
 
-  const shuffleNames = (names) => {
-    const shuffled = [...names]
+  const shufflePaths = (paths) => {
+    const shuffled = [...paths]
 
     for (let index = shuffled.length - 1; index > 0; index--) {
       const swapIndex = Math.floor(Math.random() * (index + 1))
@@ -133,7 +151,7 @@ PrivateBackground.afterDOMLoaded = `
       shuffled[swapIndex] = temporary
     }
 
-    if (shuffled.length > 1 && shuffled[0] === state.lastBackgroundName) {
+    if (shuffled.length > 1 && shuffled[0] === state.lastBackgroundPath) {
       const temporary = shuffled[0]
       shuffled[0] = shuffled[1]
       shuffled[1] = temporary
@@ -143,40 +161,40 @@ PrivateBackground.afterDOMLoaded = `
   }
 
   const refillShuffleQueue = (backgrounds) => {
-    state.shuffleQueue = shuffleNames(backgrounds.map((background) => background.name))
+    state.shuffleQueue = shufflePaths(backgrounds.map((background) => background.path))
   }
 
-  const normalizeShuffleQueue = (backgrounds, currentName) => {
-    const validNames = new Set(backgrounds.map((background) => background.name))
+  const normalizeShuffleQueue = (backgrounds, currentPath) => {
+    const validPaths = new Set(backgrounds.map((background) => background.path))
     state.shuffleQueue = Array.isArray(state.shuffleQueue)
-      ? state.shuffleQueue.filter((name) => validNames.has(name))
+      ? state.shuffleQueue.filter((path) => validPaths.has(path))
       : []
 
     if (state.shuffleQueue.length === 0) {
       refillShuffleQueue(backgrounds)
     }
 
-    if (currentName && validNames.has(currentName)) {
-      state.lastBackgroundName = currentName
-      state.shuffleQueue = state.shuffleQueue.filter((name) => name !== currentName)
+    if (currentPath && validPaths.has(currentPath)) {
+      state.lastBackgroundPath = currentPath
+      state.shuffleQueue = state.shuffleQueue.filter((path) => path !== currentPath)
     }
   }
 
   const takeNextRandomBackground = (backgrounds) => {
     if (backgrounds.length === 0) return null
 
-    const validNames = new Set(backgrounds.map((background) => background.name))
+    const validPaths = new Set(backgrounds.map((background) => background.path))
     state.shuffleQueue = Array.isArray(state.shuffleQueue)
-      ? state.shuffleQueue.filter((name) => validNames.has(name))
+      ? state.shuffleQueue.filter((path) => validPaths.has(path))
       : []
 
     if (state.shuffleQueue.length === 0) {
       refillShuffleQueue(backgrounds)
     }
 
-    const nextName = state.shuffleQueue.shift()
-    const nextBackground = backgrounds.find((background) => background.name === nextName) ?? backgrounds[0]
-    state.lastBackgroundName = nextBackground.name
+    const nextPath = state.shuffleQueue.shift()
+    const nextBackground = backgrounds.find((background) => background.path === nextPath) ?? backgrounds[0]
+    state.lastBackgroundPath = nextBackground.path
     return nextBackground
   }
 
@@ -201,11 +219,11 @@ PrivateBackground.afterDOMLoaded = `
       const nextBackground = takeNextRandomBackground(backgrounds)
       if (!nextBackground) return
 
-      safeSetStorage(STORAGE_KEY, nextBackground.name)
+      safeSetStorage(STORAGE_KEY, nextBackground.path)
       applyLayerBackground(layer, nextBackground)
       document.dispatchEvent(
         new CustomEvent(CHANGE_EVENT_NAME, {
-          detail: { name: nextBackground.name, source: "slideshow" },
+          detail: { path: nextBackground.path, name: nextBackground.name, source: "slideshow" },
         }),
       )
     }, milliseconds)
@@ -220,23 +238,23 @@ PrivateBackground.afterDOMLoaded = `
       return
     }
 
-    const backgrounds = parseBackgrounds()
+    const backgrounds = getBackgrounds()
     if (backgrounds.length === 0) {
       hideBackground(layer)
       return
     }
 
-    const selectedName = safeGetStorage(STORAGE_KEY)
-    let selected = backgrounds.find((background) => background.name === selectedName)
+    const selectedPath = safeGetStorage(STORAGE_KEY)
+    let selected = backgrounds.find((background) => background.path === selectedPath)
 
     if (isSlideshowEnabled()) {
       if (!selected) {
         selected = takeNextRandomBackground(backgrounds)
-        if (selected) safeSetStorage(STORAGE_KEY, selected.name)
+        if (selected) safeSetStorage(STORAGE_KEY, selected.path)
       }
 
       if (selected) {
-        normalizeShuffleQueue(backgrounds, selected.name)
+        normalizeShuffleQueue(backgrounds, selected.path)
         applyLayerBackground(layer, selected)
         ensureSlideshowTimer(layer, backgrounds)
         return
@@ -250,7 +268,7 @@ PrivateBackground.afterDOMLoaded = `
       return
     }
 
-    state.lastBackgroundName = selected.name
+    state.lastBackgroundPath = selected.path
     applyLayerBackground(layer, selected)
   }
 
@@ -260,6 +278,7 @@ PrivateBackground.afterDOMLoaded = `
 
     document.addEventListener("nav", applyBackground)
     document.addEventListener(CHANGE_EVENT_NAME, applyBackground)
+    document.addEventListener(CHARACTER_CHANGE_EVENT_NAME, applyBackground)
 
     state.observer = new MutationObserver(applyBackground)
     state.observer.observe(document.body, { attributes: true, attributeFilter: ["class"] })
@@ -270,24 +289,6 @@ PrivateBackground.afterDOMLoaded = `
 })()
 `
 
-PrivateBackground.css = `
-#private-background-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0.15;
-  pointer-events: none;
-  user-select: none;
-}
-
-#private-background-layer[hidden] {
-  display: none !important;
-}
-`
+PrivateBackground.css = styles
 
 export default (() => PrivateBackground) satisfies QuartzComponentConstructor

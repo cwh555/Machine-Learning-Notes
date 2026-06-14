@@ -1,25 +1,29 @@
+import styles from "./styles/privateAnimationSettings.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { pathToRoot, joinSegments } from "../util/path"
-import { getPrivateAnimationCharacters } from "../util/privateAnimations"
+import { getPrivateCharacters } from "../util/privateCharacters"
 
 const enabledStorageKey = "private-animation-enabled"
-const characterStorageKey = "private-animation-character"
+const characterStorageKey = "private-character"
 const sizeStorageKey = "private-animation-size"
 const opacityStorageKey = "private-animation-opacity"
 const fpsStorageKey = "private-animation-fps"
 const minGuardStorageKey = "private-animation-min-guard"
 const changeEventName = "private-animation-change"
+const characterChangeEventName = "private-character-change"
 const defaultSize = 100
 const defaultOpacity = 100
 const defaultFps = 8
 const defaultMinGuard = 1200
 
 const PrivateAnimationSettings: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
-  const characters = getPrivateAnimationCharacters().map((character) => ({
+  const characters = getPrivateCharacters().map((character) => ({
+    id: character.id,
     name: character.name,
-    frames: character.frames.map((frame) => ({
+    frames: character.animation.frames.map((frame) => ({
       name: frame.name,
-      src: joinSegments(pathToRoot(fileData.slug!), "static/animation", character.name, frame.name),
+      path: frame.path,
+      src: joinSegments(pathToRoot(fileData.slug!), "static/characters", character.id, frame.path),
     })),
   }))
 
@@ -43,12 +47,15 @@ const PrivateAnimationSettings: QuartzComponent = ({ fileData }: QuartzComponent
         </button>
       </div>
 
-      <div id="private-animation-details" class="private-animation-details" hidden>
-        <div class="private-setting-row private-animation-character-row">
-          <span class="private-setting-label">character:</span>
-          <div id="private-animation-character-list" class="private-animation-character-list" />
-        </div>
+      <div class="private-setting-row private-animation-character-row">
+        <span class="private-setting-label">character:</span>
+        <span id="private-animation-current-character" class="private-setting-current">
+          none
+        </span>
+      </div>
+      <div id="private-animation-frame-strip" class="private-animation-frame-strip" />
 
+      <div id="private-animation-details" class="private-animation-details" hidden>
         <div class="private-setting-row private-animation-control-row">
           <label class="private-setting-label" for="private-animation-size">
             size:
@@ -134,6 +141,7 @@ PrivateAnimationSettings.afterDOMLoaded = `
   const FPS_STORAGE_KEY = ${JSON.stringify(fpsStorageKey)}
   const MIN_GUARD_STORAGE_KEY = ${JSON.stringify(minGuardStorageKey)}
   const CHANGE_EVENT_NAME = ${JSON.stringify(changeEventName)}
+  const CHARACTER_CHANGE_EVENT_NAME = ${JSON.stringify(characterChangeEventName)}
   const DEFAULT_SIZE = ${JSON.stringify(defaultSize)}
   const DEFAULT_OPACITY = ${JSON.stringify(defaultOpacity)}
   const DEFAULT_FPS = ${JSON.stringify(defaultFps)}
@@ -143,7 +151,8 @@ PrivateAnimationSettings.afterDOMLoaded = `
   const getToggle = () => document.getElementById("private-animation-toggle")
   const getToggleLabel = () => document.getElementById("private-animation-toggle-label")
   const getDetails = () => document.getElementById("private-animation-details")
-  const getCharacterList = () => document.getElementById("private-animation-character-list")
+  const getCurrentCharacter = () => document.getElementById("private-animation-current-character")
+  const getFrameStrip = () => document.getElementById("private-animation-frame-strip")
   const getSizeSlider = () => document.getElementById("private-animation-size")
   const getSizeValue = () => document.getElementById("private-animation-size-value")
   const getOpacitySlider = () => document.getElementById("private-animation-opacity")
@@ -186,7 +195,12 @@ PrivateAnimationSettings.afterDOMLoaded = `
   }
 
   const isEnabled = () => safeGetStorage(ENABLED_STORAGE_KEY) === "true"
-  const getSelectedCharacterName = () => safeGetStorage(CHARACTER_STORAGE_KEY)
+  const getSelectedCharacterId = () => safeGetStorage(CHARACTER_STORAGE_KEY)
+  const getSelectedCharacter = () => {
+    const id = getSelectedCharacterId()
+    if (!id) return null
+    return parseCharacters().find((character) => character.id === id) ?? null
+  }
   const getSize = () => clampNumber(Number.parseInt(safeGetStorage(SIZE_STORAGE_KEY) ?? "", 10), DEFAULT_SIZE, 10, 500)
   const getOpacity = () => clampNumber(Number.parseInt(safeGetStorage(OPACITY_STORAGE_KEY) ?? "", 10), DEFAULT_OPACITY, 0, 100)
   const getFps = () => clampNumber(Number.parseInt(safeGetStorage(FPS_STORAGE_KEY) ?? "", 10), DEFAULT_FPS, 1, 30)
@@ -201,6 +215,7 @@ PrivateAnimationSettings.afterDOMLoaded = `
     const toggle = getToggle()
     const label = getToggleLabel()
     const details = getDetails()
+    const character = getSelectedCharacter()
 
     if (toggle instanceof HTMLButtonElement) {
       toggle.setAttribute("aria-checked", enabled ? "true" : "false")
@@ -208,7 +223,7 @@ PrivateAnimationSettings.afterDOMLoaded = `
     }
 
     if (label) label.textContent = enabled ? "on" : "off"
-    if (details) details.hidden = !enabled
+    if (details) details.hidden = !enabled || !character
   }
 
   const updateSlider = (slider, label, value, suffix = "") => {
@@ -221,8 +236,44 @@ PrivateAnimationSettings.afterDOMLoaded = `
     }
   }
 
+  const updateCurrentCharacter = () => {
+    const character = getSelectedCharacter()
+    const label = getCurrentCharacter()
+    const strip = getFrameStrip()
+
+    if (label) label.textContent = character?.name ?? "none"
+    if (!strip) return
+
+    strip.textContent = ""
+    if (!character) {
+      strip.hidden = true
+      return
+    }
+
+    const frames = character.frames ?? []
+    if (frames.length === 0) {
+      strip.hidden = false
+      const empty = document.createElement("p")
+      empty.className = "private-animation-empty"
+      empty.textContent = "No animation frames found for this character."
+      strip.appendChild(empty)
+      return
+    }
+
+    strip.hidden = false
+    for (const frame of frames) {
+      const image = document.createElement("img")
+      image.src = frame.src
+      image.alt = ""
+      image.loading = "lazy"
+      image.setAttribute("aria-hidden", "true")
+      strip.appendChild(image)
+    }
+  }
+
   const updateControls = () => {
     updateSwitch()
+    updateCurrentCharacter()
     updateSlider(getSizeSlider(), getSizeValue(), getSize(), "%")
     updateSlider(getOpacitySlider(), getOpacityValue(), getOpacity(), "%")
     updateSlider(getFpsSlider(), getFpsValue(), getFps())
@@ -239,60 +290,6 @@ PrivateAnimationSettings.afterDOMLoaded = `
     safeSetStorage(key, String(value))
     updateControls()
     emitChange()
-  }
-
-  const selectCharacter = (name) => {
-    safeSetStorage(CHARACTER_STORAGE_KEY, name)
-    renderCharacters()
-    emitChange()
-  }
-
-  const renderEmptyState = (list) => {
-    const empty = document.createElement("p")
-    empty.className = "private-animation-empty"
-    empty.textContent = "No animation characters found."
-    list.appendChild(empty)
-  }
-
-  const renderCharacters = () => {
-    const list = getCharacterList()
-    if (!list) return
-
-    list.textContent = ""
-    const characters = parseCharacters()
-    if (characters.length === 0) {
-      renderEmptyState(list)
-      return
-    }
-
-    const selectedName = getSelectedCharacterName()
-    for (const character of characters) {
-      const row = document.createElement("button")
-      row.type = "button"
-      row.className = "private-animation-character-option"
-      if (character.name === selectedName) row.classList.add("active")
-
-      const name = document.createElement("span")
-      name.className = "private-animation-character-name"
-      name.textContent = character.name
-      row.appendChild(name)
-
-      const frames = document.createElement("span")
-      frames.className = "private-animation-frame-strip"
-
-      for (const frame of character.frames ?? []) {
-        const image = document.createElement("img")
-        image.src = frame.src
-        image.alt = ""
-        image.loading = "lazy"
-        image.setAttribute("aria-hidden", "true")
-        frames.appendChild(image)
-      }
-
-      row.appendChild(frames)
-      row.addEventListener("click", () => selectCharacter(character.name))
-      list.appendChild(row)
-    }
   }
 
   const bindSettings = () => {
@@ -321,11 +318,13 @@ PrivateAnimationSettings.afterDOMLoaded = `
       const target = event.target
       if (target instanceof HTMLInputElement) setValue(MIN_GUARD_STORAGE_KEY, clampNumber(Number.parseInt(target.value, 10), DEFAULT_MIN_GUARD, 0, 5000))
     })
+
+    document.addEventListener(CHARACTER_CHANGE_EVENT_NAME, updateControls)
+    document.addEventListener(CHANGE_EVENT_NAME, updateControls)
   }
 
   const init = () => {
     bindSettings()
-    renderCharacters()
     updateControls()
   }
 
@@ -334,148 +333,6 @@ PrivateAnimationSettings.afterDOMLoaded = `
 })()
 `
 
-PrivateAnimationSettings.css = `
-.private-animation-settings {
-  display: none;
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--lightgray);
-  border-radius: 8px;
-  background: var(--light);
-}
-
-body.private-mode .private-animation-settings {
-  display: block;
-}
-
-.private-animation-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-.private-animation-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  border: 0;
-  background: none;
-  color: var(--darkgray);
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-}
-
-.private-animation-switch-track {
-  position: relative;
-  width: 2.4rem;
-  height: 1.2rem;
-  border: 1px solid var(--lightgray);
-  border-radius: 999px;
-  background: var(--lightgray);
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.private-animation-switch-knob {
-  position: absolute;
-  top: 50%;
-  left: 0.15rem;
-  width: 0.9rem;
-  height: 0.9rem;
-  border-radius: 999px;
-  background: var(--light);
-  transform: translateY(-50%);
-  transition: left 0.15s ease;
-}
-
-.private-animation-switch.active .private-animation-switch-track {
-  border-color: var(--secondary);
-  background: var(--secondary);
-}
-
-.private-animation-switch.active .private-animation-switch-knob {
-  left: 1.25rem;
-}
-
-.private-animation-switch-label {
-  min-width: 1.8rem;
-  color: var(--darkgray);
-}
-
-.private-animation-details {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.private-animation-details[hidden] {
-  display: none !important;
-}
-
-.private-animation-character-row {
-  align-items: flex-start;
-}
-
-.private-animation-character-list {
-  display: grid;
-  gap: 0.5rem;
-  flex: 1 1 100%;
-}
-
-.private-animation-character-option {
-  display: grid;
-  grid-template-columns: minmax(5rem, max-content) 1fr;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--lightgray);
-  border-radius: 8px;
-  background: var(--light);
-  color: var(--darkgray);
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
-}
-
-.private-animation-character-option:hover,
-.private-animation-character-option.active {
-  border-color: var(--secondary);
-  color: var(--secondary);
-}
-
-.private-animation-character-name {
-  font-weight: 600;
-}
-
-.private-animation-frame-strip {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  overflow-x: auto;
-}
-
-.private-animation-frame-strip img {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  flex: 0 0 auto;
-}
-
-.private-animation-control-row {
-  align-items: baseline;
-}
-
-.private-animation-slider {
-  width: min(240px, 100%);
-  accent-color: var(--secondary);
-}
-
-.private-animation-empty {
-  margin: 0;
-  color: var(--gray);
-}
-`
+PrivateAnimationSettings.css = styles
 
 export default (() => PrivateAnimationSettings) satisfies QuartzComponentConstructor

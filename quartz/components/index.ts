@@ -25,8 +25,10 @@ import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import PageImage from "./PageImage"
 import PrivateBackground from "./PrivateBackground"
+import PrivateCharacterSettings from "./PrivateCharacterSettings"
 import PrivateBackgroundSettings from "./PrivateBackgroundSettings"
 import PrivateAnimation from "./PrivateAnimation"
+import PrivateModeMark from "./PrivateModeMark"
 import PrivateAnimationSettings from "./PrivateAnimationSettings"
 import ImageToggle from "./ImageToggle"
 import ProtectedGate from "./ProtectedGate"
@@ -59,8 +61,10 @@ export {
   ConditionalRender,
   PageImage,
   PrivateBackground,
+  PrivateCharacterSettings,
   PrivateBackgroundSettings,
   PrivateAnimation,
+  PrivateModeMark,
   PrivateAnimationSettings,
   ImageToggle,
   ProtectedGate,
