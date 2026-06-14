@@ -26,6 +26,8 @@ import ConditionalRender from "./ConditionalRender"
 import PageImage from "./PageImage"
 import PrivateBackground from "./PrivateBackground"
 import PrivateBackgroundSettings from "./PrivateBackgroundSettings"
+import PrivateAnimation from "./PrivateAnimation"
+import PrivateAnimationSettings from "./PrivateAnimationSettings"
 import ImageToggle from "./ImageToggle"
 import ProtectedGate from "./ProtectedGate"
 
@@ -58,6 +60,8 @@ export {
   PageImage,
   PrivateBackground,
   PrivateBackgroundSettings,
+  PrivateAnimation,
+  PrivateAnimationSettings,
   ImageToggle,
   ProtectedGate,
 }
